@@ -6,8 +6,9 @@ export class LoadScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.path = "./assets/";
-        this.load.image("smb_tiles", "mapPack_tilesheet.png");
+        this.load.path = "/project/assets/";
+        this.load.image("smb_tiles", "tilemap.png");
+        this.load.image("player", "player.png")
 
         const loadingBar = this.add.graphics();
         loadingBar.fillStyle(0x0000ff, 1);
@@ -20,9 +21,6 @@ export class LoadScene extends Phaser.Scene {
     }
 
     create() {
-        // this.scene.start('GenMapScene');
-        const sprite = this.add.sprite(320, 240, "smb_tiles");
-
-        sprite.setScale(0.5);
+        this.scene.start('GenMapScene');
     }
 }

@@ -13,10 +13,13 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 640,
     height: 640,
     zoom: 2,
+    input: {
+        keyboard: true,
+    },
     physics: {
         default: "arcade",
         arcade: {
-            // debug: true,
+            debug: true,
         },
     },
     scene: [LoadScene, GenMapScene, GameScene],

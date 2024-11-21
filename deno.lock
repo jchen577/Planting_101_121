@@ -2,6 +2,7 @@
   "version": "4",
   "specifiers": {
     "npm:perlin.js@1": "1.0.0",
+    "npm:perlin@1": "1.0.0",
     "npm:phaser@^3.87.0": "3.87.0",
     "npm:vite@*": "5.4.8"
   },
@@ -166,6 +167,9 @@
     "perlin.js@1.0.0": {
       "integrity": "sha512-0MVPmdJDH6GjDoa0hOTboFTPNZeJXhFRlsyEi1GPEVke0vhF1zVrtfEaQ3hH7M2NB5+V0rCPOGWjkBksQhZB4A=="
     },
+    "perlin@1.0.0": {
+      "integrity": "sha512-BRkCDN/XkRe42NoJFgqma0bWkdbq4ovwryGeGuIxCMblvNi2353g9QCZIHsRkpCrERauPMPzolSCOfhl0i1Zeg=="
+    },
     "phaser@3.87.0": {
       "integrity": "sha512-AyI1b3T5fp05gzf6WUmu2FNqaZL+Y7w88yBRLf7YZXF9bncUSHpnDrupnTGoPqy/RKHRLBcay7zWeqQ2wiMWcw==",
       "dependencies": [
@@ -219,6 +223,9 @@
       ]
     }
   },
+  "redirects": {
+    "https://deno.land/std/http/server.ts": "https://deno.land/std@0.224.0/http/server.ts"
+  },
   "remote": {
     "https://deno.land/std@0.118.0/async/deadline.ts": "1d6ac7aeaee22f75eb86e4e105d6161118aad7b41ae2dd14f4cfd3bf97472b93",
     "https://deno.land/std@0.118.0/async/debounce.ts": "b2f693e4baa16b62793fd618de6c003b63228db50ecfe3bd51fc5f6dc0bc264b",
@@ -228,12 +235,15 @@
     "https://deno.land/std@0.118.0/async/mux_async_iterator.ts": "62abff3af9ff619e8f2adc96fc70d4ca020fa48a50c23c13f12d02ed2b760dbe",
     "https://deno.land/std@0.118.0/async/pool.ts": "353ce4f91865da203a097aa6f33de8966340c91b6f4a055611c8c5d534afd12f",
     "https://deno.land/std@0.118.0/async/tee.ts": "3e9f2ef6b36e55188de16a667c702ace4ad0cf84e3720379160e062bf27348ad",
-    "https://deno.land/std@0.118.0/http/server.ts": "d0be8a9da160255623e645f5b515fa1c6b65eecfbb9cad87ef8002d4f8d56616"
+    "https://deno.land/std@0.118.0/http/server.ts": "d0be8a9da160255623e645f5b515fa1c6b65eecfbb9cad87ef8002d4f8d56616",
+    "https://deno.land/std@0.224.0/async/delay.ts": "f90dd685b97c2f142b8069082993e437b1602b8e2561134827eeb7c12b95c499",
+    "https://deno.land/std@0.224.0/http/server.ts": "f9313804bf6467a1704f45f76cb6cd0a3396a3b31c316035e6a4c2035d1ea514"
   },
   "workspace": {
     "packageJson": {
       "dependencies": [
         "npm:perlin.js@1",
+        "npm:perlin@1",
         "npm:phaser@^3.87.0"
       ]
     }
