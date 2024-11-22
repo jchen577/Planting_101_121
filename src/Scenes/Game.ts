@@ -34,6 +34,23 @@ export class GameScene extends Phaser.Scene {
 		const mapWidth = 50 * 64;
 		const mapHeight = 50 * 64;
 		this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+
+		const turnButton = this.add.text(10, 10, "Advance Time", {
+			color: "#0f0",
+			backgroundColor: "black",
+		});
+		turnButton.setInteractive();
+		turnButton.on("pointerdown", () => {
+			this.advanceTurn();
+		});
+	}
+
+	advanceTurn() {
+		// generate new sun and water values for every tile
+		// (probably can just be new seed for sun)
+		// grow plants depending on criteria
+		// maybe add juice of a screen fade out and back in
+		console.log("The button is working.");
 	}
 
 	override update() {
@@ -60,5 +77,7 @@ export class GameScene extends Phaser.Scene {
 		else if (this.backward.isDown) {
 			this.player.setVelocityY(moveSpeed); // Move down
 		}
+
+		//getPlayerTileAttributes(this.player);
 	}
 }
