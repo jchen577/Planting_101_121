@@ -18,6 +18,7 @@ export class GameScene extends Phaser.Scene {
   private plant!: Phaser.Input.Keyboard.Key;
   private level: Tile[][] = [];
   private plants: Plant[] = [];
+  private levelInfo!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: "GameScene" });
@@ -57,6 +58,14 @@ export class GameScene extends Phaser.Scene {
     turnButton.on("pointerdown", () => {
       this.advanceTurn();
     });
+
+    // add text to display sun and water level 
+    this.levelInfo = this.add.text(10, 30, "Sun: 0, Water: 0", {
+      font: "14px Arial",
+      color: "#ffffff",
+      backgroundColor: "#000000",
+      padding: { x: 10, y: 5 },
+    });
   }
 
   advanceTurn() {
@@ -91,6 +100,15 @@ export class GameScene extends Phaser.Scene {
       const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
       if (plantHolder != null) {
         this.plants.push(plantHolder);
+      }
+    }
+    // Get the current tile attributes based on the player's position
+    const [tileY, tileX] = getPlayerTileAttributes(this.player) || [null, null];
+    if (tileX !== null && tileY !== null) {
+      const tile = level[tileY][tileX];
+      if (tile) {
+        // Update the UI with the current tile's attributes
+        this.levelInfo.setText(`Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`);
       }
     }
 
