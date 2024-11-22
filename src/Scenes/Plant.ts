@@ -1,6 +1,8 @@
 import { GameObjects, Scene } from "phaser";
 import { changePlantable, getPlantable } from "./GenerateMap.ts";
 import { plants } from "./Game.ts";
+import { Tile } from "./TileGeneration.ts";
+
 export class Plant extends Phaser.Scene {
   growthLevel: number = 0;
   fullGrownImage = 0;
@@ -14,9 +16,14 @@ export class Plant extends Phaser.Scene {
   getGrowth() {
     return this.growthLevel;
   }
-  increaseGrowth(growth: number) {
-    this.growthLevel++;
-    if (this.growthLevel == 3) {
+
+  increaseGrowth(growth: number, tile: Tile) {
+    if (tile.sunLevel >= 3 && tile.waterLevel >= 2) {
+      this.growthLevel++;
+    }
+
+    // Check if the plant is fully grown
+    if (this.growthLevel === 3) {
       this.growPlant();
     }
   }

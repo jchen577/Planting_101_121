@@ -72,8 +72,12 @@ export class GameScene extends Phaser.Scene {
     // grow plants depending on criteria
     // generate new sun and water values for every tile
     generateTileAttributes(level);
-    for (let i = 0; i < this.plants.length; i++) {
-      this.plants[i].increaseGrowth(1);
+    for (const plant of this.plants) {
+      const plantPos = getPlayerTileAttributes(plant.plantObject) || [null, null];
+      if (plantPos[0] !== null && plantPos[1] !== null) {
+        const tile = level[plantPos[0]][plantPos[1]];
+        plant.increaseGrowth(1, tile); // Pass tile attributes to the plant
+      }
     }
     // maybe add juice of a screen fade out and back in
     console.log("The button is working.");
