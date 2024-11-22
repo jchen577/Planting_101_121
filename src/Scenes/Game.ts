@@ -5,6 +5,7 @@ import {
 	level,
 	Tile,
 } from "./GenerateMap.ts";
+import { generateTileAttributes } from "./TileGeneration.ts";
 
 export class GameScene extends Phaser.Scene {
 	private player!: Phaser.Physics.Arcade.Sprite;
@@ -52,10 +53,9 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	advanceTurn() {
-		// generate new sun and water values for every tile
-
-		// (probably can just be new seed for sun)
 		// grow plants depending on criteria
+		// generate new sun and water values for every tile
+		generateTileAttributes(level);
 		// maybe add juice of a screen fade out and back in
 		console.log("The button is working.");
 	}
@@ -85,6 +85,6 @@ export class GameScene extends Phaser.Scene {
 			this.player.setVelocityY(moveSpeed); // Move down
 		}
 
-		// getPlayerTileAttributes(this.player);
+		getPlayerTileAttributes(this.player);
 	}
 }
