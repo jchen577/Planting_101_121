@@ -20,7 +20,7 @@
   * The sun and water levels of the tile determine if the plant progresses in the growth stage (i.e. if they were greater or equal to 3 and 2 respectively).
 
 -[F0.g]: A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
-  The player "wins" when they have harvested 10 plants.
+  * The player "wins" when they have harvested 10 plants.
 
 ## Reflection
 We had a bit of trouble setting up our work environment, especially with figuring out how to let files have access to the Phaser class. We did not utilize Tiled to make the map because we used Perlin Noise for generation. We do not utilize JSON yet as we do not have any sort of save function implemented.
