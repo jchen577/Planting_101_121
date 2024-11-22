@@ -1,5 +1,10 @@
 import Phaser from "phaser";
-import { generateMap, getPlayerTileAttributes } from "./GenerateMap.ts";
+import {
+	generateMap,
+	getPlayerTileAttributes,
+	level,
+	Tile,
+} from "./GenerateMap.ts";
 
 export class GameScene extends Phaser.Scene {
 	private player!: Phaser.Physics.Arcade.Sprite;
@@ -7,13 +12,14 @@ export class GameScene extends Phaser.Scene {
 	private backward!: Phaser.Input.Keyboard.Key;
 	private left!: Phaser.Input.Keyboard.Key;
 	private right!: Phaser.Input.Keyboard.Key;
+	private level: Tile[][] = [];
 
 	constructor() {
 		super({ key: "GameScene" });
 	}
 
 	create() {
-		generateMap(this);
+		this.level = generateMap(this);
 		// Add player sprite with physics
 		this.player = this.physics.add.sprite(320, 320, "player"); // Adjust starting position if needed
 		this.player.setCollideWorldBounds(true); // Prevent moving outside bounds
@@ -47,6 +53,7 @@ export class GameScene extends Phaser.Scene {
 
 	advanceTurn() {
 		// generate new sun and water values for every tile
+
 		// (probably can just be new seed for sun)
 		// grow plants depending on criteria
 		// maybe add juice of a screen fade out and back in
@@ -78,6 +85,6 @@ export class GameScene extends Phaser.Scene {
 			this.player.setVelocityY(moveSpeed); // Move down
 		}
 
-		//getPlayerTileAttributes(this.player);
+		// getPlayerTileAttributes(this.player);
 	}
 }

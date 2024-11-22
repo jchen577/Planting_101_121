@@ -2,20 +2,22 @@ import Phaser from "phaser";
 import * as noise from "perlin.js"; // Assuming you're using the perlin.js library
 
 // Define the Tile interface with properties
-interface Tile {
+export interface Tile {
 	tileNumber: number;
 	canPlant: boolean;
+	sunLevel: number;
+	waterLevel: number;
 	growthStage: number;
 }
 
 let seed: number;
 const sampleScale = 10;
 let layer: Phaser.Tilemaps.TilemapLayer | null = null;
-const level: Tile[][] = [];
+export const level: Tile[][] = [];
 
 noise.seed(1);
 
-export function generateMap(scene: Phaser.Scene) {
+export function generateMap(scene: Phaser.Scene): Tile[][] {
 	const rowSize = 50;
 	const colSize = 50;
 
@@ -38,7 +40,13 @@ export function generateMap(scene: Phaser.Scene) {
 				tileNumber = 86;
 				canPlant = false;
 			}
-			row.push({ tileNumber, canPlant, growthStage });
+			row.push({
+				tileNumber,
+				canPlant,
+				sunLevel: 0,
+				waterLevel: 0,
+				growthStage,
+			});
 		}
 		level.push(row);
 	}
@@ -56,6 +64,7 @@ export function generateMap(scene: Phaser.Scene) {
 	} else {
 		console.error("Tileset is null, map generation failed.");
 	}
+	return level;
 }
 
 export function getPlayerTileAttributes(player: Phaser.Physics.Arcade.Sprite) {
