@@ -83,7 +83,7 @@ export function getPlayerTileAttributes(player: Phaser.Physics.Arcade.Sprite) {
   const tileY = Math.floor(playerY / tileSize);
 
   if (level[tileY] && level[tileY][tileX]) {
-    console.log(level[tileY][tileX]);
+    //console.log(level[tileY][tileX]);
     return [tileY, tileX];
   }
 }

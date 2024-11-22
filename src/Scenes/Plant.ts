@@ -17,7 +17,7 @@ export class Plant extends Phaser.Scene {
     return this.growthLevel;
   }
 
-  increaseGrowth(growth: number, tile: Tile) {
+  increaseGrowth(growth: number, tile: Tile, scene: Phaser.Scene) {
     if (tile.sunLevel >= 3 && tile.waterLevel >= 2) {
       this.growthLevel++;
     }
@@ -28,33 +28,36 @@ export class Plant extends Phaser.Scene {
 
       // Add interactivity for harvesting
       this.plantObject.setInteractive();
-      this.plantObject.on('pointerdown', () => {
-        this.harvestPlant(tile);
+      this.plantObject.on("pointerdown", () => {
+        this.harvestPlant(tile, scene);
       });
     }
-  } 
-  
-  harvestPlant(tile: Tile) {
+  }
+
+  harvestPlant(tile: Tile, scene: Phaser.Scene) {
     // Remove the plant object
     this.plantObject.destroy();
 
     // Ensure the scene is cast to GameScene
-    const gameScene = this.scene as GameScene;
 
     // Update the inventory
     const plantType = this.constructor.name; // Get the class name
-    if (!gameScene.inventory[plantType]) {
-        gameScene.inventory[plantType] = 0;
+    console.log(this.fullGrownImage);
+    if (!scene.inventory[plantType]) {
+      scene.inventory[plantType] = 0;
     }
-    gameScene.inventory[plantType]++;
+    scene.inventory[plantType]++;
 
     // Reset the tile to be plantable again
-    changePlantable(tile.x, tile.y, true);
+    changePlantable(
+      (this.plantObject.x + 32) / 64,
+      (this.plantObject.y + 32) / 64,
+      true,
+    );
 
     // Update the inventory UI in the scene
-    gameScene.updateInventoryUI();
+    scene.updateInventoryUI();
   }
-
 
   plant(scene: Scene, posX: number, posY: number) {
     if (getPlantable(posX, posY)) {

@@ -24,7 +24,7 @@ export class GameScene extends Phaser.Scene {
     cactus: 0,
     snowTree: 0,
   };
-  
+
   private inventoryText!: Phaser.GameObjects.Text;
 
   constructor() {
@@ -62,31 +62,37 @@ export class GameScene extends Phaser.Scene {
       backgroundColor: "black",
     });
     turnButton.setInteractive();
-    turnButton.on("pointerdown", () => {
-      this.advanceTurn();
-    }).setScrollFactor(0);
+    turnButton
+      .on("pointerdown", () => {
+        this.advanceTurn();
+      })
+      .setScrollFactor(0);
 
-    // add text to display sun and water level 
-    this.levelInfo = this.add.text(10, 30, "Sun: 0, Water: 0", {
-      font: "14px Arial",
-      color: "#ffffff",
-      backgroundColor: "#000000",
-      padding: { x: 10, y: 5 },
-    }).setScrollFactor(0);
+    // add text to display sun and water level
+    this.levelInfo = this.add
+      .text(10, 30, "Sun: 0, Water: 0", {
+        font: "14px Arial",
+        color: "#ffffff",
+        backgroundColor: "#000000",
+        padding: { x: 10, y: 5 },
+      })
+      .setScrollFactor(0);
 
     // Initialize inventory UI
-    this.inventoryText = this.add.text(10, 60, "Inventory:", {
-      font: "14px Arial",
-      color: "#ffffff",
-      backgroundColor: "#000000",
-      padding: { x: 10, y: 5 },
-    }).setScrollFactor(0);
+    this.inventoryText = this.add
+      .text(10, 60, "Inventory:", {
+        font: "14px Arial",
+        color: "#ffffff",
+        backgroundColor: "#000000",
+        padding: { x: 10, y: 5 },
+      })
+      .setScrollFactor(0);
   }
-  
+
   updateInventoryUI() {
     let inventoryDisplay = "Inventory:\n";
     for (const [plant, count] of Object.entries(this.inventory)) {
-        inventoryDisplay += `${plant}: ${count}\n`;
+      inventoryDisplay += `${plant}: ${count}\n`;
     }
     this.inventoryText.setText(inventoryDisplay);
   }
@@ -96,10 +102,13 @@ export class GameScene extends Phaser.Scene {
     // generate new sun and water values for every tile
     generateTileAttributes(level);
     for (const plant of this.plants) {
-      const plantPos = getPlayerTileAttributes(plant.plantObject) || [null, null];
+      const plantPos = getPlayerTileAttributes(plant.plantObject) || [
+        null,
+        null,
+      ];
       if (plantPos[0] !== null && plantPos[1] !== null) {
         const tile = level[plantPos[0]][plantPos[1]];
-        plant.increaseGrowth(1, tile); // Pass tile attributes to the plant
+        plant.increaseGrowth(1, tile, this); // Pass tile attributes to the plant
       }
     }
     // maybe add juice of a screen fade out and back in
@@ -121,7 +130,7 @@ export class GameScene extends Phaser.Scene {
       } else if (randomPlant == 1) {
         newPlant = new cactus(38);
       } else {
-        newPlant = new cactus(123);
+        newPlant = new snowTree(123);
       }
       const currPos = getPlayerTileAttributes(this.player);
       const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
@@ -135,7 +144,9 @@ export class GameScene extends Phaser.Scene {
       const tile = level[tileY][tileX];
       if (tile) {
         // Update the UI with the current tile's attributes
-        this.levelInfo.setText(`Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`);
+        this.levelInfo.setText(
+          `Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`,
+        );
       }
     }
 
