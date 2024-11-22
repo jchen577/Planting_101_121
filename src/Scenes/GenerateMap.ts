@@ -2,22 +2,25 @@ import Phaser from "phaser";
 import * as noise from "perlin.js"; // Assuming you're using the perlin.js library
 
 // Define the Tile interface with properties
-interface Tile {
-  tileNumber: number;
-  canPlant: boolean;
-  moisture: number;
+
+export interface Tile {
+	tileNumber: number;
+	canPlant: boolean;
+	sunLevel: number;
+	waterLevel: number;
+	growthStage: number;
 }
 
 let seed: number;
 const sampleScale = 10;
 let layer: Phaser.Tilemaps.TilemapLayer | null = null;
-const level: Tile[][] = [];
+export const level: Tile[][] = [];
 
 noise.seed(1);
 
-export function generateMap(scene: Phaser.Scene) {
-  const rowSize = 50;
-  const colSize = 50;
+export function generateMap(scene: Phaser.Scene): Tile[][] {
+	const rowSize = 50;
+	const colSize = 50;
 
   for (let y = 0; y < colSize; y++) {
     const row: Tile[] = [];
@@ -28,21 +31,26 @@ export function generateMap(scene: Phaser.Scene) {
       let canPlant: boolean;
       let moisture: number = Math.floor(Math.random() * 5);
 
-      if (noiseValue > 0.5) {
-        tileNumber = 18;
-        canPlant = true;
-      } else if (noiseValue > 0) {
-        tileNumber = 23;
-        canPlant = true;
-      } else {
-        tileNumber = 86;
-        canPlant = false;
-        moisture = 0;
-      }
-      row.push({ tileNumber, canPlant, moisture });
-    }
-    level.push(row);
-  }
+			if (noiseValue > 0.5) {
+				tileNumber = 18;
+				canPlant = true;
+			} else if (noiseValue > 0) {
+				tileNumber = 23;
+				canPlant = true;
+			} else {
+				tileNumber = 86;
+				canPlant = false;
+			}
+			row.push({
+				tileNumber,
+				canPlant,
+				sunLevel: 0,
+				waterLevel: 0,
+				growthStage,
+			});
+		}
+		level.push(row);
+	}
 
   const map = scene.make.tilemap({
     data: level.map((row) => row.map((tile) => tile.tileNumber)),

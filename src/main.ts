@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import { GameScene } from "./Scenes/Game.ts";
 import { LoadScene } from "./Scenes/Load.ts";
-import { GenMapScene } from "./Scenes/GenerateMap.ts";
 
 // Game configuration
 const config: Phaser.Types.Core.GameConfig = {
