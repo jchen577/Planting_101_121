@@ -33,30 +33,4 @@ export class GameScene extends Phaser.Scene {
 		const mapHeight = 50 * 64;
 		this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
 	}
-
-	override update() {
-		// Movement speed (pixels per frame)
-		const moveSpeed = 150;
-
-		// Reset player velocity at the beginning of the update
-		this.player.setVelocity(0);
-
-		// Moving left (A key)
-		if (this.left.isDown) {
-			this.player.setVelocityX(-moveSpeed); // Move left
-		}
-		// Moving right (D key)
-		else if (this.right.isDown) {
-			this.player.setVelocityX(moveSpeed); // Move right
-		}
-
-		// Moving up (W key)
-		if (this.forward.isDown) {
-			this.player.setVelocityY(-moveSpeed); // Move up
-		}
-		// Moving down (S key)
-		else if (this.backward.isDown) {
-			this.player.setVelocityY(moveSpeed); // Move down
-		}
-	}
 }
