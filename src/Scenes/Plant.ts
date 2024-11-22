@@ -1,5 +1,6 @@
 import { GameObjects, Scene } from "phaser";
 import { changePlantable, getPlantable } from "./GenerateMap.ts";
+import { plants } from "./Game.ts";
 export class Plant extends Phaser.Scene {
   growthLevel: number = 0;
   fullGrownImage = 0;
@@ -14,7 +15,10 @@ export class Plant extends Phaser.Scene {
     return this.growthLevel;
   }
   increaseGrowth(growth: number) {
-    return this.growthLevel + growth;
+    this.growthLevel++;
+    if (this.growthLevel == 3) {
+      this.growPlant();
+    }
   }
   plant(scene: Scene, posX: number, posY: number) {
     if (getPlantable(posX, posY)) {
@@ -25,6 +29,9 @@ export class Plant extends Phaser.Scene {
         this.sprout,
       );
       changePlantable(posX, posY, false);
+      return this;
+    } else {
+      return null;
     }
   }
   growPlant() {
