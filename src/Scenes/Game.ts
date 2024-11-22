@@ -115,6 +115,12 @@ export class GameScene extends Phaser.Scene {
 		console.log("The button is working.");
 	}
 
+	winConditionCheck(): boolean {
+		return (
+			Object.values(this.inventory).reduce((sum, value) => sum + value, 0) >= 10
+		);
+	}
+
 	override update() {
 		// Movement speed (pixels per frame)
 		const moveSpeed = 150;
@@ -148,6 +154,14 @@ export class GameScene extends Phaser.Scene {
 					`Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`
 				);
 			}
+		}
+
+		if (this.winConditionCheck() == true) {
+			const victoryText = this.add
+				.text(320, 320, "Space Conquered!", {
+					color: "#ff0000",
+				})
+				.setScrollFactor(0);
 		}
 
 		// Moving left (A key)
