@@ -1,3 +1,30 @@
+# Devlog Entry - [11/22/2024]  
+
+## How we satisfied the software requirements
+-[F0.a]: You control a character moving over a 2D grid.
+  The player moves the character continuously over a 2D grid of tiles.
+
+-[F0.b]: You advance time manually in the turn-based simulation.
+  The player clicks the Advance Time button to move on to the next turn.
+
+-[F0.c]: You can reap or sow plants on grid cells only when you are near them.
+  The player can only sow plants when on top of the cell, but can reap from a distance with their mouse cursor.
+
+-[F0.d]: Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+  The sun and water level of a cell is determined when the player advances time.
+
+-[F0.e]: Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+  There are three plants: mushrooms, trees, and cacti. They share the same sprite for levels 1 and 2.
+
+-[F0.f]: Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+  The sun and water levels of the tile determine if the plant progresses in growth stage.
+
+-[F0.g]: A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+  The player "wins" when they have harvested 10 plants.
+
+## Reflection
+We had a bit of trouble setting up our work environment, especially with figuring out how to let file have access to the Phaser class. We did not utilize Tiled to make the map because we used Perlin Noise for generation. We do not utilize JSON yet as we do not have any sort of save function implemented.
+
 # Devlog Entry - [11/13/2024]
 
 ## Intro: The Team
