@@ -19,6 +19,13 @@ export class GameScene extends Phaser.Scene {
   private level: Tile[][] = [];
   private plants: Plant[] = [];
   private levelInfo!: Phaser.GameObjects.Text;
+  private inventory: { [key: string]: number } = {
+    redShroom: 0,
+    cactus: 0,
+    snowTree: 0,
+  };
+  
+  private inventoryText!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: "GameScene" });
@@ -66,6 +73,22 @@ export class GameScene extends Phaser.Scene {
       backgroundColor: "#000000",
       padding: { x: 10, y: 5 },
     }).setScrollFactor(0);
+
+    // Initialize inventory UI
+    this.inventoryText = this.add.text(10, 60, "Inventory:", {
+      font: "14px Arial",
+      color: "#ffffff",
+      backgroundColor: "#000000",
+      padding: { x: 10, y: 5 },
+    }).setScrollFactor(0);
+  }
+  
+  updateInventoryUI() {
+    let inventoryDisplay = "Inventory:\n";
+    for (const [plant, count] of Object.entries(this.inventory)) {
+        inventoryDisplay += `${plant}: ${count}\n`;
+    }
+    this.inventoryText.setText(inventoryDisplay);
   }
 
   advanceTurn() {
