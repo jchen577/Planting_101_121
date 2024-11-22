@@ -57,7 +57,7 @@ export class GameScene extends Phaser.Scene {
     turnButton.setInteractive();
     turnButton.on("pointerdown", () => {
       this.advanceTurn();
-    });
+    }).setScrollFactor(0);
 
     // add text to display sun and water level 
     this.levelInfo = this.add.text(10, 30, "Sun: 0, Water: 0", {
@@ -65,7 +65,7 @@ export class GameScene extends Phaser.Scene {
       color: "#ffffff",
       backgroundColor: "#000000",
       padding: { x: 10, y: 5 },
-    });
+    }).setScrollFactor(0);
   }
 
   advanceTurn() {
