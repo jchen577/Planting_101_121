@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { generateMap, getPlayerTileAttributes } from "./GenerateMap.ts";
 
 export class GameScene extends Phaser.Scene {
 	private player!: Phaser.Physics.Arcade.Sprite;
@@ -12,6 +13,7 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	create() {
+		generateMap(this);
 		// Add player sprite with physics
 		this.player = this.physics.add.sprite(320, 320, "player"); // Adjust starting position if needed
 		this.player.setCollideWorldBounds(true); // Prevent moving outside bounds
@@ -32,5 +34,31 @@ export class GameScene extends Phaser.Scene {
 		const mapWidth = 50 * 64;
 		const mapHeight = 50 * 64;
 		this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+	}
+
+	override update() {
+		// Movement speed (pixels per frame)
+		const moveSpeed = 150;
+
+		// Reset player velocity at the beginning of the update
+		this.player.setVelocity(0);
+
+		// Moving left (A key)
+		if (this.left.isDown) {
+			this.player.setVelocityX(-moveSpeed); // Move left
+		}
+		// Moving right (D key)
+		else if (this.right.isDown) {
+			this.player.setVelocityX(moveSpeed); // Move right
+		}
+
+		// Moving up (W key)
+		if (this.forward.isDown) {
+			this.player.setVelocityY(-moveSpeed); // Move up
+		}
+		// Moving down (S key)
+		else if (this.backward.isDown) {
+			this.player.setVelocityY(moveSpeed); // Move down
+		}
 	}
 }

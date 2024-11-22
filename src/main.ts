@@ -5,24 +5,24 @@ import { GenMapScene } from "./Scenes/GenerateMap.ts";
 
 // Game configuration
 const config: Phaser.Types.Core.GameConfig = {
-    parent: "phaser-game",
-    type: Phaser.CANVAS,
-    render: {
-        pixelArt: true,
-    },
-    width: 640,
-    height: 640,
-    zoom: 2,
-    input: {
-        keyboard: true,
-    },
-    physics: {
-        default: "arcade",
-        arcade: {
-            debug: true,
-        },
-    },
-    scene: [LoadScene, GenMapScene, GameScene],
+	parent: "phaser-game",
+	type: Phaser.CANVAS,
+	render: {
+		pixelArt: true,
+	},
+	width: 640,
+	height: 640,
+	zoom: 2,
+	input: {
+		keyboard: true,
+	},
+	physics: {
+		default: "arcade",
+		arcade: {
+			debug: true,
+		},
+	},
+	scene: [LoadScene, GameScene],
 };
 
 // Create the Phaser game instance

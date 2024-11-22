@@ -8,132 +8,66 @@ interface Tile {
 	growthStage: number;
 }
 
-export class GenMapScene extends Phaser.Scene {
-	private seed!: number;
-	private sampleScale!: number;
-	private layer: Phaser.Tilemaps.TilemapLayer | null = null;
-	private level: Tile[][] = []; // Declare level here so it's accessible outside generateMap
+let seed: number;
+const sampleScale = 10;
+let layer: Phaser.Tilemaps.TilemapLayer | null = null;
+const level: Tile[][] = [];
 
-	// Temporary character code//
-	private player!: Phaser.Physics.Arcade.Sprite;
-	private forward!: Phaser.Input.Keyboard.Key;
-	private backward!: Phaser.Input.Keyboard.Key;
-	private left!: Phaser.Input.Keyboard.Key;
-	private right!: Phaser.Input.Keyboard.Key;
+noise.seed(1);
 
-	constructor() {
-		super("GenMapScene");
-	}
+export function generateMap(scene: Phaser.Scene) {
+	const rowSize = 50;
+	const colSize = 50;
 
-	preload() {
-		// this.seed = Math.random();
-		this.sampleScale = 10;
-		noise.seed(1);
-	}
+	for (let y = 0; y < colSize; y++) {
+		const row: Tile[] = [];
+		for (let x = 0; x < rowSize; x++) {
+			const noiseValue = noise.simplex2(x / sampleScale, y / sampleScale);
 
-	create() {
-		this.generateMap();
-		// this.scene.start('GameScene');
+			let tileNumber: number;
+			let canPlant: boolean;
+			let growthStage: number = 0;
 
-		// Temporary character//
-		this.player = this.physics.add.sprite(320, 320, "player");
-		this.player.setCollideWorldBounds(true);
-
-		this.cameras.main.startFollow(this.player);
-		this.cameras.main.setFollowOffset(0, 0);
-
-		this.forward = this.input!.keyboard!.addKey(
-			Phaser.Input.Keyboard.KeyCodes.W
-		);
-		this.backward = this.input!.keyboard!.addKey(
-			Phaser.Input.Keyboard.KeyCodes.S
-		);
-		this.left = this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-		this.right = this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-
-		const mapWidth = 50 * 64;
-		const mapHeight = 50 * 64;
-		this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
-	}
-
-	generateMap() {
-		const rowSize = 50;
-		const colSize = 50;
-
-		for (let y = 0; y < colSize; y++) {
-			const row: Tile[] = [];
-			for (let x = 0; x < rowSize; x++) {
-				const noiseValue = noise.simplex2(
-					x / this.sampleScale,
-					y / this.sampleScale
-				);
-
-				let tileNumber: number;
-				let canPlant: boolean;
-				let growthStage: number = 0;
-
-				if (noiseValue > 0.5) {
-					tileNumber = 18;
-					canPlant = true;
-				} else if (noiseValue > 0) {
-					tileNumber = 23;
-					canPlant = true;
-				} else {
-					tileNumber = 86;
-					canPlant = false;
-				}
-				row.push({ tileNumber, canPlant, growthStage });
+			if (noiseValue > 0.5) {
+				tileNumber = 18;
+				canPlant = true;
+			} else if (noiseValue > 0) {
+				tileNumber = 23;
+				canPlant = true;
+			} else {
+				tileNumber = 86;
+				canPlant = false;
 			}
-			this.level.push(row);
+			row.push({ tileNumber, canPlant, growthStage });
 		}
-
-		const map = this.make.tilemap({
-			data: this.level.map((row) => row.map((tile) => tile.tileNumber)),
-			tileWidth: 64,
-			tileHeight: 64,
-		});
-
-		const tileset = map.addTilesetImage("smb_tiles", "smb_tiles");
-
-		if (tileset) {
-			this.layer = map.createLayer(0, tileset, 0, 0);
-		} else {
-			console.error("Tileset is null, map generation failed.");
-		}
+		level.push(row);
 	}
 
-	override update() {
-		const moveSpeed = 150;
+	const map = scene.make.tilemap({
+		data: level.map((row) => row.map((tile) => tile.tileNumber)),
+		tileWidth: 64,
+		tileHeight: 64,
+	});
 
-		this.player.setVelocity(0);
+	const tileset = map.addTilesetImage("smb_tiles", "smb_tiles");
 
-		if (this.left.isDown) {
-			this.player.setVelocityX(-moveSpeed);
-		} else if (this.right.isDown) {
-			this.player.setVelocityX(moveSpeed);
-		}
-
-		if (this.forward.isDown) {
-			this.player.setVelocityY(-moveSpeed);
-		} else if (this.backward.isDown) {
-			this.player.setVelocityY(moveSpeed);
-		}
-
-		// Get the tile the player is standing on
-		this.getPlayerTileAttributes();
+	if (tileset) {
+		layer = map.createLayer(0, tileset, 0, 0);
+	} else {
+		console.error("Tileset is null, map generation failed.");
 	}
+}
 
-	getPlayerTileAttributes() {
-		const tileSize = 64;
-		const playerX = this.player.x;
-		const playerY = this.player.y;
+export function getPlayerTileAttributes(player: Phaser.Physics.Arcade.Sprite) {
+	const tileSize = 64;
+	const playerX = player.x;
+	const playerY = player.y;
 
-		const tileX = Math.floor(playerX / tileSize);
-		const tileY = Math.floor(playerY / tileSize);
+	const tileX = Math.floor(playerX / tileSize);
+	const tileY = Math.floor(playerY / tileSize);
 
-		if (this.level[tileY] && this.level[tileY][tileX]) {
-			const tileData = this.level[tileY][tileX];
-			console.log(`Tile at (${tileX}, ${tileY}):`, tileData);
-		}
+	if (level[tileY] && level[tileY][tileX]) {
+		const tileData = level[tileY][tileX];
+		console.log(`Tile at (${tileX}, ${tileY}):`, tileData);
 	}
 }
