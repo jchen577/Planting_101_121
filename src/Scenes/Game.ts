@@ -1,4 +1,6 @@
 import Phaser, { Game, GameObjects } from "phaser";
+import { saveGameState } from "./SaveGame";
+import { loadGameState } from "./LoadGame";
 
 import {
 	generateMap,
@@ -19,6 +21,7 @@ export class GameScene extends Phaser.Scene {
 	private level: Tile[][] = [];
 	private plants: Plant[] = [];
 	private levelInfo!: Phaser.GameObjects.Text;
+	
 	private inventory: { [key: string]: number } = {
 		redShroom: 0,
 		cactus: 0,
@@ -87,6 +90,28 @@ export class GameScene extends Phaser.Scene {
 				padding: { x: 10, y: 5 },
 			})
 			.setScrollFactor(0);
+
+		//temp save and load buttons
+		const saveButton = this.add.text(10, 570, "Save Game", {
+			color: "#0f0",
+			backgroundColor: "black",
+		});
+		saveButton.setInteractive();
+		saveButton
+			.on("pointerdown", () => {
+				saveGameState(this);
+			})
+			.setScrollFactor(0);
+		
+		const loadButton = this.add.text(10, 600, "Load Game", {
+			color: "#0f0",
+			backgroundColor: "black",
+		});
+		loadButton.setInteractive()
+		.on("pointerdown", () => 
+			loadGameState(this),
+		);
+		loadButton.setScrollFactor(0);
 	}
 
 	updateInventoryUI() {
@@ -181,5 +206,7 @@ export class GameScene extends Phaser.Scene {
 		else if (this.backward.isDown) {
 			this.player.setVelocityY(moveSpeed); // Move down
 		}
+
+		this.updateInventoryUI();
 	}
 }

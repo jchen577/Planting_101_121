@@ -13,6 +13,24 @@ export class Plant extends Phaser.Scene {
 		super();
 	}
 
+	// static updatePlantVisuals(scene: GameScene, plants: Plant[]): void {
+	// 	plants.forEach((plant) => {
+	// 	  if (!plant.plantObject) {
+	// 		const tileX = Math.floor(plant.plantObject?.x / 64) || 0;
+	// 		const tileY = Math.floor(plant.plantObject?.y / 64) || 0;
+	
+	// 		const planted = plant.plant(scene, tileX, tileY);
+	// 		if (planted) {
+	// 		  // Restore growth level and visuals
+	// 		  planted.growthLevel = plant.growthLevel;
+	// 		  if (plant.growthLevel === 3) {
+	// 			planted.growPlant();
+	// 		  }
+	// 		}
+	// 	  }
+	// 	});
+	//   }
+
 	getGrowth() {
 		return this.growthLevel;
 	}

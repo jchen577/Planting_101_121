@@ -66,6 +66,10 @@ export function generateMap(scene: Phaser.Scene): Tile[][] {
   }
 }
 
+export function getLevel(): Tile[][] {
+  return level;
+}
+
 export function getPlantable(tileX: number, tileY: number) {
   return level[tileY][tileX].canPlant;
 }
@@ -85,5 +89,12 @@ export function getPlayerTileAttributes(player: Phaser.Physics.Arcade.Sprite) {
   if (level[tileY] && level[tileY][tileX]) {
     //console.log(level[tileY][tileX]);
     return [tileY, tileX];
+  }
+}
+
+export function updateMapVisuals(): void {
+  if (layer) {
+      const tileData = getLevel().map((row) => row.map((tile) => tile.tileNumber));
+      layer.putTilesAt(tileData, 0, 0);
   }
 }
