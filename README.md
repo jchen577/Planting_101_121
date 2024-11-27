@@ -1,12 +1,14 @@
 # Devlog Entry - [11/27/2024]  
 ## How we satisfied the software requirements
+- [F0] Everything that we implimented to satisfy the F0 software requirements have stayed consisten. Thus, the requirements are met using what we created last week.
+
 - [F1.a] Game is stored in a grid state as our grid is made of tile objects. 
   * The games grid is backed by a contiguous byte array in an AoS format as each tile is treated as an object with grouped attributes.
 
   ![F1.a data structure diagram](./dataStructure.png)
 
 - [F1.b] Player can manually save their game progress by clicking on the "Save Game" button. 
-  * Once "Save Game" button is clicked, game is saved by downloading JSON file of game state in players browser. 
+  * Once "Save Game" button is clicked, game is saved by downloading JSON file of game state in players browser. Important game state data such as player location, inventory, and the entire map is formated in a AoS in the JSON file. If the player wishes to load the save file, they simply have to press load and select the save file.
 
 - [F1.c] Game automatically saves state of game every 2 mins. Player is prompted with request of downloading multiple files upon opening game. It gets saved among the manual save entries. 
   * A JSON file of game is automatically downloaded into the players browser saving game state every 2 mins. 
@@ -15,7 +17,7 @@
   * New game state gets loaded once undo is selected. 
 
 ## Reflection: 
-Looking back at our new F1 requirements, our teams plan hasn't changed much except for the new implementation of saving game states. With our usage of Perlin Noise, we were able to have our grid be set up of tile objects and it make AoS format and byte array storage requirement work in our favor. In terms of the new game state implementation we structured it so we can build on top of our existing workflow. We decided that downloading JSON files to save our game state would work best with the existing format of our games tile grid state. 
+Looking back at our new F1 requirements, our teams plan hasn't changed much except for the new implementation of saving game states. With our usage of Perlin Noise, we were able to have our grid be set up of tile objects and it make AoS format and byte array storage requirement work in our favor. In terms of the new game state implementation we structured it so we can build on top of our existing workflow. Originally, we were going to use JSON files in conjuction with "Tiled" to create and save our map. But, due to the fact that we have changed from a "Tiled" created map to a Perlin noise PCG map, our use of JSON files, while still in line with saving the game state, has been inplimented to fit the way our PCG map is created (i.e. using our "Tile" structure).
 
 # Devlog Entry - [11/22/2024]  
 

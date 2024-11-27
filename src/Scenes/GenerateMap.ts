@@ -16,7 +16,7 @@ const sampleScale = 10;
 let layer: Phaser.Tilemaps.TilemapLayer | null = null;
 export const level: Tile[][] = [];
 
-noise.seed(1);
+noise.seed(Math.random());
 
 export function generateMap(scene: Phaser.Scene): Tile[][] {
   const rowSize = 50;
