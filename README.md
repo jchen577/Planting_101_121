@@ -1,3 +1,22 @@
+# Devlog Entry - [11/27/2024]  
+## How we satisfied the software requirements
+- [F1.a] Game is stored in a grid state as our grid is made of tile objects. 
+  * The games grid is backed by a contiguous byte array in an AoS format as each tile is treated as an object with grouped attributes.
+
+  ![F1.a data structure diagram](./dataStructure.png)
+
+- [F1.b] Player can manually save their game progress by clicking on the "Save Game" button. 
+  * Once "Save Game" button is clicked, game is saved by downloading JSON file of game state in players browser. 
+
+- [F1.c] Game automatically saves state of game every 2 mins. Player is prompted with request of downloading multiple files upon opening game. It gets saved among the manual save entries. 
+  * A JSON file of game is automatically downloaded into the players browser saving game state every 2 mins. 
+
+- [F1.d] The player is able to undo every major choice. 
+  * New game state gets loaded once undo is selected. 
+
+## Reflection: 
+Looking back at our new F1 requirements, our teams plan hasn't changed much except for the new implementation of saving game states. With our usage of Perlin Noise, we were able to have our grid be set up of tile objects and it make AoS format and byte array storage requirement work in our favor. In terms of the new game state implementation we structured it so we can build on top of our existing workflow. We decided that downloading JSON files to save our game state would work best with the existing format of our games tile grid state. 
+
 # Devlog Entry - [11/22/2024]  
 
 ## How we satisfied the software requirements
