@@ -1,13 +1,14 @@
 import Phaser, { Game, GameObjects } from "phaser";
 import { saveGameState } from "./SaveGame";
 import { loadGameState } from "./LoadGame";
+import { State, addState, loadState } from "./Undo.ts";
 import { AutoSaveManager } from "./AutoSaveManager";
 
 import {
-  generateMap,
-  getPlayerTileAttributes,
-  level,
-  Tile,
+	generateMap,
+	getPlayerTileAttributes,
+	level,
+	Tile,
 } from "./GenerateMap.ts";
 import { generateTileAttributes } from "./TileGeneration.ts";
 import { Plant, redShroom, snowTree, cactus } from "./Plant.ts";
@@ -23,6 +24,8 @@ export class GameScene extends Phaser.Scene {
   private plants: Plant[] = [];
   private levelInfo!: Phaser.GameObjects.Text;
   private autoSaveManager!: AutoSaveManager;
+  private undoStack: State[] = [];
+	private redoStack: State[] = [];
 
   private inventory: { [key: string]: number } = {
     redShroom: 0,
@@ -70,6 +73,8 @@ export class GameScene extends Phaser.Scene {
     turnButton
       .on("pointerdown", () => {
         this.advanceTurn();
+        addState(this, this.undoStack);
+				this.redoStack = [];
       })
       .setScrollFactor(0);
 
@@ -112,6 +117,37 @@ export class GameScene extends Phaser.Scene {
     loadButton.setInteractive().on("pointerdown", () => loadGameState(this));
     loadButton.setScrollFactor(0);
 
+    const undoButton = this.add.text(10, 510, "Undo", {
+			color: "#0f0",
+			backgroundColor: "black",
+		});
+
+		undoButton.setInteractive();
+		undoButton
+			.on("pointerdown", () => {
+				const state = this.undoStack.pop();
+				if (state) {
+					this.redoStack.push(state);
+					loadState(this, state);
+				}
+			})
+			.setScrollFactor(0);
+
+		const redoButton = this.add.text(10, 540, "Redo", {
+			color: "#0f0",
+			backgroundColor: "black",
+		});
+		redoButton.setInteractive();
+		redoButton
+			.on("pointerdown", () => {
+				const state = this.redoStack.pop();
+				if (state) {
+					this.undoStack.push(state);
+					loadState(this, state);
+				}
+			})
+			.setScrollFactor(0);
+    
     // Initialize AutoSaveManager and start autosave
     this.autoSaveManager = new AutoSaveManager(this);
     this.autoSaveManager.startAutoSave(); // Autosave every 5 mins
@@ -132,6 +168,8 @@ export class GameScene extends Phaser.Scene {
       inventoryDisplay += `${plant}: ${count}\n`;
     }
     this.inventoryText.setText(inventoryDisplay);
+    addState(this, this.undoStack);
+		this.redoStack = [];
   }
 
   advanceTurn() {
@@ -179,6 +217,8 @@ export class GameScene extends Phaser.Scene {
       const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
       if (plantHolder != null) {
         this.plants.push(plantHolder);
+        addState(this, this.undoStack);
+			  this.redoStack = [];
       }
     }
     // Get the current tile attributes based on the player's position
