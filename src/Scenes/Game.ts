@@ -1,6 +1,7 @@
 import Phaser, { Game, GameObjects } from "phaser";
 import { saveGameState } from "./SaveGame";
 import { loadGameState } from "./LoadGame";
+import { AutoSaveManager } from "./AutoSaveManager";
 
 import {
   generateMap,
@@ -21,6 +22,7 @@ export class GameScene extends Phaser.Scene {
   private level: Tile[][] = [];
   private plants: Plant[] = [];
   private levelInfo!: Phaser.GameObjects.Text;
+  private autoSaveManager!: AutoSaveManager;
 
   private inventory: { [key: string]: number } = {
     redShroom: 0,
@@ -109,6 +111,19 @@ export class GameScene extends Phaser.Scene {
     });
     loadButton.setInteractive().on("pointerdown", () => loadGameState(this));
     loadButton.setScrollFactor(0);
+
+    // Initialize AutoSaveManager and start autosave
+    this.autoSaveManager = new AutoSaveManager(this);
+    this.autoSaveManager.startAutoSave(); // Autosave every 5 mins
+
+    // Check for auto-save and prompt the user
+    const autoSave = localStorage.getItem("auto-save");
+    if (autoSave) {
+      const userWantsToContinue = confirm("Do you want to continue where you left off?");
+      if (userWantsToContinue) {
+        loadGameState(this, "auto-save");
+      }
+    }
   }
 
   updateInventoryUI() {
