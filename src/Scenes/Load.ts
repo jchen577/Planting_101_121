@@ -7,7 +7,7 @@ export class LoadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.path = "/project/assets/";
+    this.load.path = "/tree/main/assets/";
     this.load.image("smb_tiles", "tilemap.png");
     this.load.spritesheet("all_tiles", "tilemap.png", {
       frameWidth: 64,
