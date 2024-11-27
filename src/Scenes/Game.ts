@@ -127,8 +127,6 @@ export class GameScene extends Phaser.Scene {
 			.on("pointerdown", () => {
 				const state = this.undoStack.pop();
 				if (state) {
-					console.log(state);
-					console.log(this.undoStack);
 					this.redoStack.push(state);
 					loadState(this, state);
 				}

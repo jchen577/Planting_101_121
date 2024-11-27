@@ -27,9 +27,6 @@ export async function loadGameState(scene: GameScene): Promise<void> {
 
 		// Reset and restore plants
 		scene.plants.forEach((plant: Plant) => plant.deletePlant(scene.plants));
-		// scene.plants = [];
-		//console.log(scene.plants);
-		//console.log(state.plants);
 		state.plants.forEach((plantData: any) => {
 			const { plantType, tileX, tileY, growthLevel } = plantData;
 
