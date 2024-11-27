@@ -47,12 +47,9 @@ export function loadState(scene: GameScene, state: State) {
 
 	// Restore inventory
 	scene.inventory = state.inventory;
-	console.log(scene.plants);
 	// Reset and restore plants
 	scene.plants.forEach((plant: Plant) => {
-		console.log(plant);
 		plant.deletePlant(scene.plants);
-		console.log(plant);
 	});
 	state.plants.forEach((plantData: any) => {
 		const { plantType, tileX, tileY, growthLevel } = plantData;
