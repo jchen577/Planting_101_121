@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { GameScene } from "./Scenes/Game.ts";
+import { GameScene } from "./Scenes/Game.js";
 import { LoadScene } from "./Scenes/Load.ts";
 
 // Game configuration
