@@ -6,9 +6,9 @@ export class LoadScene extends Phaser.Scene {
 
     // Initial game state
     this.gameState = {
-      player: { x: 0, y: 0 },
-      inventory: [],
-      time: new Date().toISOString(),
+      player: { x: 0, y: 0 }, // Player's initial position
+      inventory: [], // Initial inventory
+      time: new Date().toISOString(), // Save timestamp
     };
   }
 
@@ -42,9 +42,19 @@ export class LoadScene extends Phaser.Scene {
     }
   }
 
+  // Update game state (e.g., during gameplay)
+  updateGameState(newX, newY, newInventory) {
+    this.gameState.player.x = newX;
+    this.gameState.player.y = newY;
+    this.gameState.inventory = newInventory;
+    console.log("Game state updated:", this.gameState);
+  }
+
   preload() {
     // Set asset path and preload assets
     this.load.path = "./project/assets/";
+
+    // Load assets
     this.load.image("smb_tiles", "tilemap.png");
     this.load.spritesheet("all_tiles", "tilemap.png", {
       frameWidth: 64,
@@ -64,7 +74,7 @@ export class LoadScene extends Phaser.Scene {
       .text(320, 200, "Loading...", { font: "24px Arial", color: "#ffffff" })
       .setOrigin(0.5);
 
-    // Load game state from local storage when preloading
+    // Load game state from local storage
     this.loadGameState();
 
     // Set up autosave to run every 5 minutes
@@ -74,6 +84,23 @@ export class LoadScene extends Phaser.Scene {
   }
 
   create() {
+    // Create a tilemap
+    const map = this.make.tilemap({
+      tileWidth: 64,
+      tileHeight: 64,
+      width: 10, // Number of tiles horizontally
+      height: 10, // Number of tiles vertically
+    });
+
+    // Add the tileset to the map
+    const tileset = map.addTilesetImage("smb_tiles"); // Match key from preload
+    const layer = map.createBlankLayer("Ground", tileset);
+
+    // Fill the layer with a default tile
+    layer.fill(0); // Replace 0 with the index of your default tile
+
+    console.log("Map and layer created successfully!");
+
     // Add a manual save button
     this.add
       .text(10, 10, "Save Game", { font: "18px Arial", color: "#00ff00" })
@@ -82,7 +109,7 @@ export class LoadScene extends Phaser.Scene {
         this.saveAsJSON();
       });
 
-    // Add a manual load button (for debugging)
+    // Add a manual load button
     this.add
       .text(10, 40, "Load Game", { font: "18px Arial", color: "#00ff00" })
       .setInteractive()
@@ -90,7 +117,7 @@ export class LoadScene extends Phaser.Scene {
         this.loadGameState();
       });
 
-    // Start the game scene
+    // Start the next scene
     this.scene.start("GameScene");
   }
 }
