@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import * as noise from "perlin.js"; // Assuming you're using the perlin.js library
 import { Plant } from "./Plant.ts";
+import { YAMLtoJSObj } from "./YAMLInterpreter.js";
 
 // Define the Tile interface with properties
 
@@ -19,8 +20,14 @@ export const level: Tile[][] = [];
 noise.seed(Math.random());
 
 export function generateMap(scene: Phaser.Scene): Tile[][] {
-	const rowSize = 50;
-	const colSize = 50;
+	let rowSize = 50;
+	let colSize = 50;
+
+	const gameConfig = YAMLtoJSObj();
+	if (gameConfig) {
+		rowSize = gameConfig.tutorial.grid_size[0];
+		colSize = gameConfig.tutorial.grid_size[1];
+	}
 
 	for (let y = 0; y < colSize; y++) {
 		const row: Tile[] = [];

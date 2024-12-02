@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "perlin": "^1.0.0",
     "perlin.js": "^1.0.0",
     "phaser": "^3.87.0"
