@@ -2,7 +2,7 @@ import Phaser, { Game, GameObjects } from "phaser";
 import { saveGameState } from "./SaveGame";
 import { loadGameState } from "./LoadGame";
 import { State, addState, loadState } from "./Undo.ts";
-//import { AutoSaveManager } from "./AutoSaveManager";
+import { AutoSaveManager } from "./AutoSaveManager";
 
 import {
 	generateMap,
@@ -23,7 +23,7 @@ export class GameScene extends Phaser.Scene {
 	private level: Tile[][] = [];
 	private plants: Plant[] = [];
 	private levelInfo!: Phaser.GameObjects.Text;
-	//private autoSaveManager!: AutoSaveManager;
+	private autoSaveManager!: AutoSaveManager;
 	private undoStack: State[] = [];
 	private redoStack: State[] = [];
 
@@ -149,8 +149,8 @@ export class GameScene extends Phaser.Scene {
 			.setScrollFactor(0);
 
 		// Initialize AutoSaveManager and start autosave
-		// this.autoSaveManager = new AutoSaveManager(this);
-		// this.autoSaveManager.startAutoSave(); // Autosave every 5 mins
+		this.autoSaveManager = new AutoSaveManager(this);
+		this.autoSaveManager.startAutoSave(); // Autosave every 5 mins
 
 		// Check for auto-save and prompt the user
 		const autoSave = localStorage.getItem("auto-save");
