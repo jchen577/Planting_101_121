@@ -95,7 +95,6 @@ function generateAttributes(tile: Tile): void {
 ```
 JavaScript:
 ```
-Copy code
 function generateAttributes(tile) {
     tile.sunLevel = Math.floor(Math.random() * 5);
 }
