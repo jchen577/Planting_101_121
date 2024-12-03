@@ -1,4 +1,4 @@
-# Devlog Entry - [12/02/2024]  
+# F2. Devlog Entry - [12/02/2024]  
 ## How we satisfied the software requirements
 ### F0+F1
  Everything that we implimented to satisfy the F0 and F1 software requirements have stayed consistent. Thus, the requirements are met using what we created last week. The game still has the same tile structure, gameplay, and the autosave/manual save both still work as they did last week. 
@@ -118,7 +118,7 @@ export class Plant {
 ## Reflection
 Looking back at our new F2 requirements, our teams plan hasn't changed much except for the new implementation of the internal and external DSL's. It definitely forced us to restructure our code so that the program is much more organized and takes in more specific inputs. The switch from TypeScript to JavaScript did help simplify our development process by removing the need for compilation and type definitions. It allowed for quicker iteration and testing. At this point, we haven't reconsidered our tools and materials described. We still are using Perlin noise for our map generation. For our roles, we alternate our tasks throughout the week so we haven't been strictly following the role assignments. In terms of game design evolution, we are looking into adding more visual stages of growth for our plants to make it easier to for players to understand when the plants can be harvested. 
 
-# Devlog Entry - [11/27/2024]  
+# F1. Devlog Entry - [11/27/2024]  
 ## How we satisfied the software requirements
 ### [F0] Everything that we implimented to satisfy the F0 software requirements have stayed consistent. Thus, the requirements are met using what we created last week.
 
@@ -139,7 +139,7 @@ Looking back at our new F2 requirements, our teams plan hasn't changed much exce
 ## Reflection: 
 Looking back at our new F1 requirements, our teams plan hasn't changed much except for the new implementation of saving game states. With our usage of Perlin Noise, we were able to have our grid be set up of tile objects and it make AoS format and byte array storage requirement work in our favor. In terms of the new game state implementation we structured it so we can build on top of our existing workflow. Originally, we were going to use JSON files in conjuction with "Tiled" to create and save our map. But, due to the fact that we have changed from a "Tiled" created map to a Perlin noise PCG map, our use of JSON files, while still in line with saving the game state, has been inplimented to fit the way our PCG map is created (i.e. using our "Tile" structure).
 
-# Devlog Entry - [11/22/2024]  
+# F0. Devlog Entry - [11/22/2024]  
 
 ## How we satisfied the software requirements
 ### [F0.a]: You control a character moving over a 2D grid.
