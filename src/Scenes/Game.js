@@ -4,11 +4,7 @@ import { loadGameState } from "./LoadGame";
 import { addState, loadState } from "./Undo";
 import { AutoSaveManager } from "./AutoSaveManager";
 
-import {
-  generateMap,
-  getPlayerTileAttributes,
-  level
-} from "./GenerateMap";
+import { generateMap, getPlayerTileAttributes, level } from "./GenerateMap";
 import { generateTileAttributes } from "./TileGeneration";
 import { Plant, redShroom, snowTree, cactus, PlantBuilder } from "./Plant";
 
@@ -33,9 +29,12 @@ export class GameScene extends Phaser.Scene {
       snowTree: 0,
     };
     this.inventoryText = null;
+    this.langData;
   }
 
   create() {
+    this.langData = this.cache.json.get(`lang_en`);
+
     this.level = generateMap(this);
 
     this.player = this.physics.add.sprite(320, 320, "player");
@@ -45,8 +44,12 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.setFollowOffset(0, 0);
 
     this.forward = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.backward = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.plant = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.backward = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.S,
+    );
+    this.plant = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
+    );
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
@@ -54,7 +57,7 @@ export class GameScene extends Phaser.Scene {
     const mapHeight = 50 * 64;
     this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
 
-    const turnButton = this.add.text(10, 10, "Advance Time", {
+    const turnButton = this.add.text(10, 10, this.langData.timeMessage, {
       color: "#0f0",
       backgroundColor: "black",
     });
@@ -68,7 +71,7 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.levelInfo = this.add
-      .text(10, 30, "Sun: 0, Water: 0", {
+      .text(10, 30, `${this.langData.sun}: 0, ${this.langData.water}: 0`, {
         font: "14px Arial",
         color: "#ffffff",
         backgroundColor: "#000000",
@@ -77,7 +80,7 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.inventoryText = this.add
-      .text(10, 60, "Inventory:", {
+      .text(10, 60, `${this.langData.inventory}:`, {
         font: "14px Arial",
         color: "#ffffff",
         backgroundColor: "#000000",
@@ -85,7 +88,7 @@ export class GameScene extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    const saveButton = this.add.text(10, 570, "Save Game", {
+    const saveButton = this.add.text(10, 570, this.langData.save, {
       color: "#0f0",
       backgroundColor: "black",
     });
@@ -96,14 +99,14 @@ export class GameScene extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    const loadButton = this.add.text(10, 600, "Load Game", {
+    const loadButton = this.add.text(10, 600, this.langData.load, {
       color: "#0f0",
       backgroundColor: "black",
     });
     loadButton.setInteractive().on("pointerdown", () => loadGameState(this));
     loadButton.setScrollFactor(0);
 
-    const undoButton = this.add.text(10, 510, "Undo", {
+    const undoButton = this.add.text(10, 510, this.langData.undo, {
       color: "#0f0",
       backgroundColor: "black",
     });
@@ -118,7 +121,7 @@ export class GameScene extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    const redoButton = this.add.text(10, 540, "Redo", {
+    const redoButton = this.add.text(10, 540, this.langData.redo, {
       color: "#0f0",
       backgroundColor: "black",
     });
@@ -139,7 +142,7 @@ export class GameScene extends Phaser.Scene {
     const autoSave = localStorage.getItem("auto-save");
     if (autoSave) {
       const userWantsToContinue = confirm(
-        "Do you want to continue where you left off?"
+        "Do you want to continue where you left off?",
       );
       if (userWantsToContinue) {
         loadGameState(this, "auto-save");
@@ -148,9 +151,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   updateInventoryUI() {
-    let inventoryDisplay = "Inventory:\n";
+    let inventoryDisplay = `${this.langData.inventory}:\n`;
     for (const [plant, count] of Object.entries(this.inventory)) {
-      inventoryDisplay += `${plant}: ${count}\n`;
+      inventoryDisplay += `${this.langData[plant]}: ${count}\n`;
     }
     this.inventoryText.setText(inventoryDisplay);
     addState(this, this.undoStack);
@@ -160,7 +163,10 @@ export class GameScene extends Phaser.Scene {
   advanceTurn() {
     generateTileAttributes(level);
     for (const plant of this.plants) {
-      const plantPos = getPlayerTileAttributes(plant.plantObject) || [null, null];
+      const plantPos = getPlayerTileAttributes(plant.plantObject) || [
+        null,
+        null,
+      ];
       if (plantPos[0] !== null && plantPos[1] !== null) {
         const tile = level[plantPos[0]][plantPos[1]];
         plant.increaseGrowth(1, tile, this, this.plants);
@@ -222,14 +228,14 @@ export class GameScene extends Phaser.Scene {
       const tile = level[tileY][tileX];
       if (tile) {
         this.levelInfo.setText(
-          `Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`
+          `Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`,
         );
       }
     }
 
     if (this.winConditionCheck()) {
       this.add
-        .text(320, 320, "Space Conquered!", { color: "#ff0000" })
+        .text(320, 320, this.langData.win, { color: "#ff0000" })
         .setScrollFactor(0);
     }
 

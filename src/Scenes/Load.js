@@ -21,7 +21,9 @@ export class LoadScene extends Phaser.Scene {
 
   // Save game state as a downloadable JSON file
   saveAsJSON() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.gameState));
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(this.gameState));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute("download", "gameState.json");
@@ -53,6 +55,9 @@ export class LoadScene extends Phaser.Scene {
   preload() {
     // Set asset path and preload assets
     this.load.path = "./project/assets/";
+
+    //Load Language
+    this.load.json("lang_en", "lang_eng.json");
 
     // Load assets
     this.load.image("smb_tiles", "tilemap.png");
