@@ -34,4 +34,4 @@ const w = Number(game.config.width);
 const h = Number(game.config.height);
 let cursors: Phaser.Types.Input.Keyboard.CursorKeys | null = null;
 
-export { game, centerX, centerY, w, h, cursors };
+export { game, centerX, centerY, w, h, cursors }; 
