@@ -9,6 +9,9 @@ export class Plant extends Phaser.Scene {
   sprout = 59;
   plantObject: GameObjects.Sprite;
   position: number[] = [];
+  maxGrowth = 3;
+  moistureRequired = 2;
+  sunRequired = 3;
 
   constructor() {
     super();
@@ -18,18 +21,37 @@ export class Plant extends Phaser.Scene {
     return this.growthLevel;
   }
 
+  setGrownImage(imgNum: number) {
+    this.fullGrownImage = imgNum;
+  }
+
+  setGrowthNumber(growthLvl: number) {
+    this.maxGrowth = growthLvl;
+  }
+
+  setReqMoisture(moisture: number) {
+    this.moistureRequired = moisture;
+  }
+
+  setReqSun(sun: number) {
+    this.sunRequired = sun;
+  }
+
   increaseGrowth(
     growth: number,
     tile: Tile,
     scene: Phaser.Scene,
     plants: Plant[],
   ) {
-    if (tile.sunLevel >= 3 && tile.waterLevel >= 2) {
+    if (
+      tile.sunLevel >= this.sunRequired &&
+      tile.waterLevel >= this.moistureRequired
+    ) {
       this.growthLevel++;
     }
 
     // Check if the plant is fully grown
-    if (this.growthLevel === 3) {
+    if (this.growthLevel == this.maxGrowth) {
       this.growPlant();
 
       // Add interactivity for harvesting
@@ -94,6 +116,38 @@ export class Plant extends Phaser.Scene {
   }
   growPlant() {
     this.plantObject.setTexture("all_tiles", this.fullGrownImage);
+  }
+}
+
+export class PlantBuilder {
+  private plant: Plant;
+
+  constructor(plant: Plant) {
+    this.plant = plant;
+  }
+
+  setGrowthLevel(level: number) {
+    this.plant.setGrowthNumber(level);
+    return this;
+  }
+
+  setMoistureRequired(moisture: number) {
+    this.plant.setReqMoisture(moisture);
+    return this;
+  }
+
+  setSunRequired(sun: number) {
+    this.plant.setReqSun(sun);
+    return this;
+  }
+
+  setGrownImage(image: number) {
+    this.plant.setGrownImage(image);
+    return this;
+  }
+
+  build() {
+    return this.plant;
   }
 }
 

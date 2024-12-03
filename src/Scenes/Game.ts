@@ -11,7 +11,7 @@ import {
   Tile,
 } from "./GenerateMap.ts";
 import { generateTileAttributes } from "./TileGeneration.ts";
-import { Plant, redShroom, snowTree, cactus } from "./Plant.ts";
+import { Plant, redShroom, snowTree, cactus, PlantBuilder } from "./Plant.ts";
 
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
@@ -210,13 +210,29 @@ export class GameScene extends Phaser.Scene {
       let newPlant: Plant = new Plant();
       if (randomPlant == 0) {
         newPlant = new redShroom(115);
+        new PlantBuilder(newPlant)
+          .setGrowthLevel(3)
+          .setMoistureRequired(2)
+          .setSunRequired(2)
+          .setGrownImage(115);
       } else if (randomPlant == 1) {
         newPlant = new cactus(38);
+        new PlantBuilder(newPlant)
+          .setGrowthLevel(4)
+          .setMoistureRequired(2)
+          .setSunRequired(4)
+          .setGrownImage(38);
       } else {
         newPlant = new snowTree(123);
+        new PlantBuilder(newPlant)
+          .setGrowthLevel(5)
+          .setMoistureRequired(4)
+          .setSunRequired(2)
+          .setGrownImage(123);
       }
       const currPos = getPlayerTileAttributes(this.player);
       const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
       if (plantHolder != null) {
         this.plants.push(plantHolder);
         addState(this, this.undoStack);
