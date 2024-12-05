@@ -1,3 +1,3 @@
 export default {
-  base: Deno.env.get("REPO_NAME") || "/project",
+  base: '/seedy_place_in_outer_space',
 };
