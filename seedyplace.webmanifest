@@ -1,0 +1,16 @@
+{
+    "name": "Seedy Place in Outer Space",
+    "short_name": "Seedy Place",
+    "description": "A game about farming in outer space.",
+    "icons": [
+      {
+        "src": "assets/player.png",
+        "sizes": "64x64",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "theme_color": "#B12A34",
+    "background_color": "#B12A34"
+  }
