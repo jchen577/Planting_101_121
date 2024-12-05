@@ -1,16 +1,17 @@
 {
-    "name": "Seedy Place in Outer Space",
-    "short_name": "Seedy Place",
-    "description": "A game about farming in outer space.",
-    "icons": [
-      {
-        "src": "./assets/player.png",
-        "sizes": "64x64",
-        "type": "image/png"
-      }
-    ],
-    "start_url": "./",
-    "display": "fullscreen",
-    "theme_color": "#B12A34",
-    "background_color": "#B12A34"
-  }
+  "name": "Seedy Place in Outer Space",
+  "short_name": "Seedy Place",
+  "description": "A game about farming in outer space.",
+  "icons": [
+    {
+      "src": "/seedy_place_in_outer_space/assets/player.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "scope": "/seedy_place_in_outer_space/",
+  "start_url": "/seedy_place_in_outer_space/",
+  "display": "standalone",
+  "theme_color": "#B12A34",
+  "background_color": "#B12A34"
+}
