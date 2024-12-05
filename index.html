@@ -9,7 +9,7 @@
     <script type="module" src="./src/Scenes/GenerateMap.js"></script>
     <script type="module" src="./src/Scenes/Game.js"></script>
     <link rel="canonical" href="https://jchen577.github.io/seedy_place_in_outer_space/"/>
-    <link rel="manifest" href="/seedy_place_in_outer_space/seedyplace.webmanifest"/>
+    <link rel="manifest" href="/project/seedyplace.webmanifest"/>
     <style>
         #save-indicator {
             position: absolute;
@@ -30,13 +30,5 @@
     <span id="description"></span>
     <!-- Add Save Indicator -->
     <div id="save-indicator">Auto-saving...</div>
-    <script>
-        if (navigator.serviceWorker) {
-            navigator.serviceWorker.register (
-                '/seedy_place_in_outer_space/sw.js',
-                {scope: '/seedy_place_in_outer_space/'}
-            )
-        }
-    </script>
 </body>
 </html>
