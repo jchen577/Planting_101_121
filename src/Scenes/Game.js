@@ -228,7 +228,7 @@ export class GameScene extends Phaser.Scene {
       const tile = level[tileY][tileX];
       if (tile) {
         this.levelInfo.setText(
-          `Sun: ${tile.sunLevel}, Water: ${tile.waterLevel}`,
+          `${this.langData.sun}: ${tile.sunLevel}, ${this.langData.water}: ${tile.waterLevel}`,
         );
       }
     }
