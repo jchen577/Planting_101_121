@@ -8,7 +8,17 @@
     <script type="module" src="./src/Scenes/Load.js"></script>
     <script type="module" src="./src/Scenes/GenerateMap.js"></script>
     <script type="module" src="./src/Scenes/Game.js"></script>
-
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/seedy_place_in_outer_space/serviceWorker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }).catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+    </script>
     <style>
         #save-indicator {
             position: absolute;
