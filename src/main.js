@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { GameScene } from "./Scenes/Game.js";
 import { LoadScene } from "./Scenes/Load.js";
+import {MainMenu} from "./Scenes/MainMenu.js";
 
 if ('serviceWorker' in navigator) {
 	const baseURL = import.meta.env.BASE_URL;
@@ -34,7 +35,7 @@ const config = {
 			debug: true,
 		},
 	},
-	scene: [LoadScene, GameScene],
+	scene: [LoadScene, MainMenu, GameScene],
 };
 
 // Create the Phaser game instance

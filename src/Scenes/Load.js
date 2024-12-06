@@ -55,9 +55,10 @@ export class LoadScene extends Phaser.Scene {
   preload() {
     // Set asset path and preload assets
     this.load.path = "./seedy_place_in_outer_space/assets/";
-
-    //Load Language
+    
     this.load.json("lang_en", "lang_eng.json");
+    this.load.json("lang_jp", "lang_jp.json");
+    this.load.json("lang_ar", "lang_ar.json");
 
     // Load assets
     this.load.image("smb_tiles", "tilemap.png");
@@ -123,6 +124,6 @@ export class LoadScene extends Phaser.Scene {
       });
 
     // Start the next scene
-    this.scene.start("GameScene");
+    this.scene.start("MainMenu");
   }
 }
