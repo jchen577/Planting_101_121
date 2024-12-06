@@ -54,7 +54,7 @@ export class LoadScene extends Phaser.Scene {
 
   preload() {
     // Set asset path and preload assets
-    this.load.path = "/assets/";
+    this.load.path = "./seedy_place_in_outer_space/assets/";
 
     this.load.json("lang_en", "lang_eng.json");
     this.load.json("lang_jp", "lang_jp.json");
