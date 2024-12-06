@@ -33,7 +33,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.selectedLang = data.selectedLang || 'lang_eng.json'; // Default to English if not provided
+    this.selectedLang = data.selectedLang || "lang_eng.json"; // Default to English if not provided
   }
 
   create() {
@@ -61,6 +61,79 @@ export class GameScene extends Phaser.Scene {
     const mapHeight = 50 * 64;
     this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
 
+    //Mobile movement
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      const leftButton = this.add
+        .text(
+          this.cameras.main.width / 2 - 80,
+          this.cameras.main.height - 100,
+          "<-",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+            fontSize: 50,
+          },
+        )
+        .setInteractive();
+      leftButton
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x - 10, this.player.y);
+        })
+        .setScrollFactor(0);
+
+      const rightButton = this.add
+        .text(
+          this.cameras.main.width / 2 + 60,
+          this.cameras.main.height - 100,
+          "->",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+            fontSize: 50,
+          },
+        )
+        .setInteractive();
+      rightButton
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x + 10, this.player.y);
+        })
+        .setScrollFactor(0);
+      const upButton = this.add
+        .text(
+          this.cameras.main.width / 2,
+          this.cameras.main.height - 200,
+          "↑",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+            fontSize: 70,
+          },
+        )
+        .setInteractive();
+      upButton
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x, this.player.y - 10);
+        })
+        .setScrollFactor(0);
+
+      const downButton = this.add
+        .text(
+          this.cameras.main.width / 2,
+          this.cameras.main.height - 100,
+          "↓",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+            fontSize: 70,
+          },
+        )
+        .setInteractive();
+      downButton
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x, this.player.y + 10);
+        })
+        .setScrollFactor(0);
+    }
     const turnButton = this.add.text(10, 10, this.langData.timeMessage, {
       color: "#0f0",
       backgroundColor: "black",
