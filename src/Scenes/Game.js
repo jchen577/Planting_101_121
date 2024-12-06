@@ -32,8 +32,12 @@ export class GameScene extends Phaser.Scene {
     this.langData;
   }
 
+  init(data) {
+    this.selectedLang = data.selectedLang || 'lang_eng.json'; // Default to English if not provided
+  }
+
   create() {
-    this.langData = this.cache.json.get(`lang_en`);
+    this.langData = this.cache.json.get(this.selectedLang);
 
     this.level = generateMap(this);
 
