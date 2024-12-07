@@ -6,6 +6,8 @@ const STATIC_FILES = ["./index.html", "./serviceWorker.js"]; // Other static fil
 
 // Ensure the `dist/` folder exists
 await ensureDir(OUTPUT_DIR);
+await copy("./assets", "./dist/assets", { overwrite: true });
+await copy("./index.html", "./dist/index.html", { overwrite: true });
 
 // Copy static files (e.g., index.html, serviceWorker.js)
 for (const file of STATIC_FILES) {
