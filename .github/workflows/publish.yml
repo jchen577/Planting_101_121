@@ -16,40 +16,35 @@ jobs:
 
     steps:
       # Step 1: Checkout the repository
-      - name: Checkout the code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # Step 2: Set up Deno (use the exact compatible version)
+      # Step 2: Set up Deno
       - name: Set up Deno
         uses: denoland/setup-deno@v2
         with:
           deno-version: v1.33.1
 
-      # Step 3: Debug Lockfile Content (optional)
-      - name: Debug Lockfile
-        run: cat deno.lock
-
-      # Step 4: Install Dependencies (with reload)
+      # Step 3: Install dependencies (optional for npm packages)
       - name: Set up Dependencies
-        run: deno cache --reload --lock=deno.lock --lock-write src/main.js
+        run: deno cache src/main.js
 
-      # Step 5: Build the project
+      # Step 4: Build the project
       - name: Build the project
         run: deno task build
 
-      # Step 6: Debug Dist Directory
+      # Step 5: Debug Dist Directory
       - name: Debug Dist Directory Contents
         run: ls -R dist
 
-      # Step 7: Configure GitHub Pages
+      # Step 6: Configure GitHub Pages
       - uses: actions/configure-pages@v5
 
-      # Step 8: Upload `dist/` for deployment
+      # Step 7: Upload `dist/` for deployment
       - name: Upload `dist` Directory
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
-      # Step 9: Deploy to GitHub Pages
+      # Step 8: Deploy to GitHub Pages
       - id: deployment
         uses: actions/deploy-pages@v4
