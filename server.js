@@ -6,44 +6,35 @@ const rootPath = Deno.cwd();
 serve(
   async (request) => {
     const url = new URL(request.url);
-    let filePath = join(rootPath, url.pathname); // Default: Map request to the filesystem
+    let filePath = join(rootPath, "dist", url.pathname);
 
     try {
-      // Serve the index.html for root or main entry requests
+      // Serve index.html for root `/` or `/seedy_place_in_outer_space/`
       if (
         url.pathname === "/" ||
         url.pathname === "/seedy_place_in_outer_space/"
       ) {
-        filePath = join(rootPath, "dist", "index.html");
-      }
-
-      // Serve the Service Worker explicitly
-      if (url.pathname === "/seedy_place_in_outer_space/serviceWorker.js") {
-        filePath = join(rootPath, "dist", "serviceWorker.js");
-      }
-
-      // Serve static assets like JSON, images, icons
-      if (url.pathname.startsWith("/seedy_place_in_outer_space/assets/")) {
         filePath = join(
           rootPath,
           "dist",
-          url.pathname.replace("/seedy_place_in_outer_space", ""),
+          "seedy_place_in_outer_space",
+          "index.html",
         );
       }
 
-      // Read and return the requested file
+      // Check the file exists and read it
       const file = await Deno.readFile(filePath);
       const ext = extname(filePath);
 
-      // Match MIME types with file extensions
+      // Serve correct MIME types
       const mimeTypes = {
         ".html": "text/html",
         ".js": "application/javascript",
         ".json": "application/json",
         ".png": "image/png",
         ".ico": "image/x-icon",
-        ".jpg": "image/jpeg",
         ".css": "text/css",
+        ".jpg": "image/jpeg",
       };
 
       return new Response(file, {
@@ -52,12 +43,12 @@ serve(
           "content-type": mimeTypes[ext] || "application/octet-stream",
         },
       });
-    } catch {
-      // Send a 404 if the file is not found
+    } catch (error) {
+      console.error(`404 Not Found: ${filePath}`, error.message);
       return new Response("404: File Not Found", { status: 404 });
     }
   },
   { port: 8080 },
 );
 
-console.log("Server is running at http://localhost:8080/");
+console.log("Server running at http://localhost:8080/");
