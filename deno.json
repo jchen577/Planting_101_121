@@ -1,7 +1,12 @@
 {
   "tasks": {
+    // For local development
     "dev": "deno run -A --node-modules-dir npm:vite",
-    "build": "mkdir -p dist && deno bundle \"src/main.js\" \"dist/main.js\" && deno run --allow-read --allow-write build.js",
+
+    // For bundling the JS and copying static files
+    "build": "mkdir -p dist && deno bundle src/main.js dist/main.js && deno run --allow-read --allow-write build.js",
+
+    // Serve `dist/` locally for preview
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.157.0/http/file_server.ts dist/"
   },
   "compilerOptions": {
