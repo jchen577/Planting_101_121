@@ -1,12 +1,15 @@
 name: Deploy static content to Pages
+
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 jobs:
   deploy:
     environment:
@@ -16,16 +19,28 @@ jobs:
     env:
       REPO_NAME: ${{ github.event.repository.name }}
     steps:
+      # Step 1: Check out the repository
       - uses: actions/checkout@v4
+
+      # Step 2: Set up Deno (ensure Deno is available in the runner)
       - name: Setup Deno
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: deno task build
+
+      # Step 3: Build the project using the corrected task
+      - name: Build the project
+        run: deno task build # This task now uses the fixed bundle command
+
+      # Step 4: Configure Pages (GitHub Pages artifact handling)
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+
+      # Step 5: Upload the contents of the `dist` directory (includes static assets)
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          # Upload dist repository
-          path: "./dist"
+          path: "./dist" # Make sure static assets are copied into the `dist` directory
+
+      # Step 6: Deploy to GitHub Pages
       - id: deployment
         uses: actions/deploy-pages@v4

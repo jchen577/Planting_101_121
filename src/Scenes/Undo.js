@@ -1,5 +1,5 @@
-import { getLevel, updateMapVisuals } from "./GenerateMap";
-import { redShroom, cactus, snowTree } from "./Plant";
+import { getLevel, updateMapVisuals } from "./GenerateMap.js";
+import { redShroom, cactus, snowTree } from "./Plant.js";
 
 /**
  * Adds the current game state to the undo stack.
@@ -25,7 +25,7 @@ export function addState(scene, undoStack) {
         canPlant: tile.canPlant,
         sunLevel: tile.sunLevel,
         waterLevel: tile.waterLevel,
-      }))
+      })),
     ),
   };
   undoStack.push(state);
