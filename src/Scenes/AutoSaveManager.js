@@ -1,4 +1,4 @@
-import { saveGameState } from "./SaveGame.js";
+import { saveGameState } from "./SaveGame";
 
 export class AutoSaveManager {
   constructor(scene) {
@@ -7,7 +7,7 @@ export class AutoSaveManager {
   }
 
   /**
-   * Starts the auto-save system with a specified interval
+   * Starts the auto-save system with a specified interval 
    * @param {number} interval The interval in milliseconds for auto-saving every 2 mins
    */
   startAutoSave(interval = 300000) {
@@ -22,9 +22,7 @@ export class AutoSaveManager {
     }, interval);
 
     console.log(
-      "Auto-save system started. Saving every " +
-        interval / 60000 +
-        " minutes.",
+      "Auto-save system started. Saving every " + interval / 60000 + " minutes."
     );
   }
 

@@ -1,7 +1,7 @@
-import YAML from "js-yaml";
-import GameConfig from "./GameSettings.yaml?raw";
+import YAML from 'js-yaml';
+import GameConfig from './GameSettings.yaml?raw';
 
 export function YAMLtoJSObj() {
-  const parsedContent = YAML.load(GameConfig);
-  return parsedContent;
+    const parsedContent = YAML.load(GameConfig);
+    return parsedContent;
 }

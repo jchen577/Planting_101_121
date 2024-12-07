@@ -1,12 +1,12 @@
-import Phaser from "https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js";
-import { saveGameState } from "./SaveGame.js";
-import { loadGameState } from "./LoadGame.js";
-import { addState, loadState } from "./Undo.js";
-import { AutoSaveManager } from "./AutoSaveManager.js";
+import Phaser from "phaser";
+import { saveGameState } from "./SaveGame";
+import { loadGameState } from "./LoadGame";
+import { addState, loadState } from "./Undo";
+import { AutoSaveManager } from "./AutoSaveManager";
 
-import { generateMap, getPlayerTileAttributes, level } from "./GenerateMap.js";
-import { generateTileAttributes } from "./TileGeneration.js";
-import { Plant, redShroom, snowTree, cactus, PlantBuilder } from "./Plant.js";
+import { generateMap, getPlayerTileAttributes, level } from "./GenerateMap";
+import { generateTileAttributes } from "./TileGeneration";
+import { Plant, redShroom, snowTree, cactus, PlantBuilder } from "./Plant";
 
 export class GameScene extends Phaser.Scene {
   constructor() {

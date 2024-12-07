@@ -1,4 +1,4 @@
-import { getLevel } from "./GenerateMap.js";
+import { getLevel } from "./GenerateMap";
 
 /**
  * Saves the current game state into a JSON file.
@@ -23,7 +23,7 @@ export function saveGameState(scene) {
         canPlant: tile.canPlant,
         sunLevel: tile.sunLevel,
         waterLevel: tile.waterLevel,
-      })),
+      }))
     ),
     undoStack: scene.undoStack,
     redoStack: scene.redoStack,

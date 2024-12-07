@@ -1,4 +1,4 @@
-import Phaser from "https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js";
+import Phaser from "phaser";
 
 export class LoadScene extends Phaser.Scene {
   constructor() {

@@ -1,6 +1,6 @@
-import { getLevel } from "./GenerateMap.js";
-import { updateMapVisuals } from "./GenerateMap.js";
-import { redShroom, cactus, snowTree } from "./Plant.js"; // Import Plant classes
+import { getLevel } from "./GenerateMap";
+import { updateMapVisuals } from "./GenerateMap";
+import { redShroom, cactus, snowTree } from "./Plant"; // Import Plant classes
 
 /**
  * Loads the game state from a JSON file.
@@ -48,11 +48,7 @@ export async function loadGameState(scene) {
             planted.growPlant();
             planted.plantObject.setInteractive();
             planted.plantObject.once("pointerdown", () => {
-              planted.harvestPlant(
-                getLevel()[tileX][tileY],
-                scene,
-                scene.plants,
-              );
+              planted.harvestPlant(getLevel()[tileX][tileY], scene, scene.plants);
             });
           }
 
