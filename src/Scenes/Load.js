@@ -54,19 +54,35 @@ export class LoadScene extends Phaser.Scene {
 
   preload() {
     // Set asset path and preload assets
-    this.load.path = "./seedy_place_in_outer_space/assets/";
+    //this.load.path = "./seedy_place_in_outer_space/assets/";
 
-    this.load.json("lang_en", "lang_eng.json");
-    this.load.json("lang_jp", "lang_jp.json");
-    this.load.json("lang_ar", "lang_ar.json");
+    this.load.json(
+      "lang_en",
+      "/seedy_place_in_outer_space/assets/lang_eng.json",
+    );
+    this.load.json(
+      "lang_jp",
+      "/seedy_place_in_outer_space/assets/lang_jp.json",
+    );
+    this.load.json(
+      "lang_ar",
+      "/seedy_place_in_outer_space/assets/lang_ar.json",
+    );
 
     // Load assets
-    this.load.image("smb_tiles", "tilemap.png");
-    this.load.spritesheet("all_tiles", "tilemap.png", {
-      frameWidth: 64,
-      frameHeight: 64,
-    });
-    this.load.image("player", "player.png");
+    this.load.image(
+      "smb_tiles",
+      "/seedy_place_in_outer_space/assets/tilemap.png",
+    );
+    this.load.spritesheet(
+      "all_tiles",
+      "/seedy_place_in_outer_space/assets/tilemap.png",
+      {
+        frameWidth: 64,
+        frameHeight: 64,
+      },
+    );
+    this.load.image("player", "/seedy_place_in_outer_space/assets/player.png");
 
     // Create a loading bar
     const loadingBar = this.add.graphics();

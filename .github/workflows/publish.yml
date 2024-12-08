@@ -21,11 +21,10 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: deno task build
+      - run: deno run --allow-read --allow-write build.js # Adjust if build runs independently
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          # Upload dist repository
-          path: "./dist"
+          path: "./dist" # Ensure this points correctly to your build output
       - id: deployment
         uses: actions/deploy-pages@v4
