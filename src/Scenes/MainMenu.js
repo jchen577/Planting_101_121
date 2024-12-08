@@ -7,15 +7,17 @@ export class MainMenu extends Phaser.Scene {
   }
 
   create() {
-    const title = this.add
-      .text(this.cameras.main.centerX, 100, "Seedy Place in Outer Space", {
+    this.langData = this.cache.json.get(this.selectedLang);
+
+    this.title = this.add
+      .text(this.cameras.main.centerX, 100, this.langData.title, {
         font: "48px Arial",
         fill: "#ffffff",
       })
       .setOrigin(0.5);
 
-    const playButton = this.add
-      .text(this.cameras.main.centerX, 200, "Play", {
+    this.playButton = this.add
+      .text(this.cameras.main.centerX, 200, this.langData.play, {
         font: "32px Arial",
         fill: "#ffffff",
         backgroundColor: "#0000ff",
@@ -28,8 +30,8 @@ export class MainMenu extends Phaser.Scene {
         this.scene.start("GameScene", { selectedLang: this.selectedLang });
       });
 
-    const settingsButton = this.add
-      .text(this.cameras.main.centerX, 300, "Settings", {
+    this.settingsButton = this.add
+      .text(this.cameras.main.centerX, 300, this.langData.settings, {
         font: "32px Arial",
         fill: "#ffffff",
         backgroundColor: "#ff0000",
@@ -47,26 +49,29 @@ export class MainMenu extends Phaser.Scene {
       this.cameras.main.width,
       this.cameras.main.height,
       0x000000,
-      0.5,
+      0.5
     );
 
     const settingsMenu = this.add.container(
       this.cameras.main.centerX,
-      this.cameras.main.centerY,
+      this.cameras.main.centerY
     );
 
     const menuBg = this.add.rectangle(0, 0, 400, 300, 0xffffff).setOrigin(0.5);
     settingsMenu.add(menuBg);
 
     const menuTitle = this.add
-      .text(0, -100, "Select Language", { font: "24px Arial", fill: "#000000" })
+      .text(0, -100, this.langData.selectLanguage, {
+        font: "24px Arial",
+        fill: "#000000",
+      })
       .setOrigin(0.5);
     settingsMenu.add(menuTitle);
 
     const languages = [
       { name: "English", file: "lang_en" },
-      { name: "Japanese", file: "lang_jp" },
-      { name: "Arabic", file: "lang_ar" },
+      { name: "日本語", file: "lang_jp" },
+      { name: "اللغة العربية", file: "lang_ar" },
     ];
 
     languages.forEach((lang, index) => {
@@ -83,9 +88,19 @@ export class MainMenu extends Phaser.Scene {
           settingsMenu.destroy();
           bg.destroy();
           this.selectedLang = lang.file;
+
+          this.langData = this.cache.json.get(this.selectedLang);
+          this.updateText();
+
           console.log(`Language selected: ${this.selectedLang}`);
         });
       settingsMenu.add(langButton);
     });
+  }
+
+  updateText() {
+    this.title.setText(this.langData.title);
+    this.playButton.setText(this.langData.play);
+    this.settingsButton.setText(this.langData.settings);
   }
 }
