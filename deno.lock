@@ -361,6 +361,8 @@
   },
   "remote": {
     "https://cdn.jsdelivr.net/npm/phaser@^3.87.0/dist/phaser.js": "8209afab7e78711ee598f1a86ec0b6bb8bb2803d0ace446fce54d6924fc2d8b8",
+    "https://cdn.skypack.dev/-/js-yaml@v4.1.0-dDv6O5b7vFYj0Ro3QdID/dist=es2019,mode=imports/optimized/js-yaml.js": "efa944688ea631840477fbb0c8375dc1fa5fbe35116e6f5547f2d13305b5822f",
+    "https://cdn.skypack.dev/js-yaml": "8388da59b80b9fe935e8a96acd292593cc733b522d647257b4a162b947ffc73e",
     "https://deno.land/std@0.118.0/async/deadline.ts": "1d6ac7aeaee22f75eb86e4e105d6161118aad7b41ae2dd14f4cfd3bf97472b93",
     "https://deno.land/std@0.118.0/async/debounce.ts": "b2f693e4baa16b62793fd618de6c003b63228db50ecfe3bd51fc5f6dc0bc264b",
     "https://deno.land/std@0.118.0/async/deferred.ts": "ab60d46ba561abb3b13c0c8085d05797a384b9f182935f051dc67136817acdee",
