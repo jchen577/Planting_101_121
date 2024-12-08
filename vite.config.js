@@ -1,13 +1,8 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/seedy_place_in_outer_space",
+  base: "/seedy_place_in_outer_space/", // This defines the base URL for your app
   build: {
-    outDir: "dist/seedy_place_in_outer_space",
-    rollupOptions: {
-      input: {
-        main: "./index.html", // Ensure this points to your main HTML file
-      },
-    },
+    outDir: "dist/seedy_place_in_outer_space", // Outputs to this structured path
   },
 });
