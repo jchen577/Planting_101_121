@@ -3,19 +3,6 @@ import { GameScene } from "./Scenes/Game.js";
 import { LoadScene } from "./Scenes/Load.js";
 import {MainMenu} from "./Scenes/MainMenu.js";
 
-if ('serviceWorker' in navigator) {
-	const baseURL = import.meta.env.BASE_URL;
-
-  	navigator.serviceWorker
-		.register(`${baseURL.endsWith('/') ? baseURL : baseURL + '/'}sw.js`)
-		.then((registration) => {
-		console.log('Service Worker registered with scope:', registration.scope);
-		})
-		.catch((error) => {
-		console.error('Service Worker registration failed:', error);
-		});
-}
-
 // Game configuration
 const config = {
 	parent: "phaser-game",
