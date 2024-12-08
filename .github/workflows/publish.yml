@@ -7,24 +7,35 @@ permissions:
   contents: read
   pages: write
   id-token: write
+
 jobs:
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
     env:
       REPO_NAME: ${{ github.event.repository.name }}
+
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Deno
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: deno run --allow-read --allow-write build.js # Adjust if build runs independently
+
+      - name: Build Application
+        run: |
+          deno run --allow-read --allow-write build.js       # Run your local build logic
+          deno run -A --node-modules-dir npm:vite build     # Run the Vite build process
+
       - uses: actions/configure-pages@v5
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist" # Ensure this points correctly to your build output
+          path: "./dist/seedy_place_in_outer_space" # Upload the built files correctly
+
       - id: deployment
         uses: actions/deploy-pages@v4
