@@ -1,9 +1,9 @@
 import { ensureDir, copy } from "https://deno.land/std@0.157.0/fs/mod.ts";
-import YAML from "npm:js-yaml";
+//import YAML from "https://cdn.skypack.dev/js-yaml";
 import { join } from "https://deno.land/std@0.203.0/path/mod.ts";
 
 const OUTPUT_DIR = "./dist/seedy_place_in_outer_space"; // Ensure it includes the correct folder
-const YAML_FILE = "./src/Scenes/GameSettings.yaml"; // Path to your YAML file
+//const YAML_FILE = "./src/Scenes/GameSettings.yaml"; // Path to your YAML file
 const JSON_OUTPUT = `${OUTPUT_DIR}/assets/GameSettings.json`; // Path for JSON output
 const MANIFEST_SOURCE = "./public/manifest.json"; // Path to source manifest.json
 const MANIFEST_OUTPUT = `${OUTPUT_DIR}/manifest.json`; // Where the manifest will end up
@@ -16,14 +16,14 @@ await ensureDir(`${OUTPUT_DIR}/assets`); // Ensure the assets directory exists
 await ensureDir(OUTPUT_DIR); // Ensure the output directory itself exists
 
 // Step 2: Parse YAML and write it to JSON
-try {
+/*try {
   const yamlContent = await Deno.readTextFile(YAML_FILE);
   const parsedYAML = YAML.load(yamlContent); // Parse YAML to object
   await Deno.writeTextFile(JSON_OUTPUT, JSON.stringify(parsedYAML, null, 2)); // Write to JSON
   console.log(`YAML successfully converted to JSON --> ${JSON_OUTPUT}`);
 } catch (error) {
   console.error("Failed to process YAML:", error.message);
-}
+}*/
 
 // Step 3: Copy or generate manifest.json
 try {
