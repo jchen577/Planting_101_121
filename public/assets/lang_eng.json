@@ -10,5 +10,9 @@
   "redShroom": "Red Shroom",
   "cactus": "Cactus",
   "snowTree": "Snow Tree",
-  "win": "Space Conquered!"
+  "win": "Space Conquered!",
+  "title": "Seedy Place in Outer Space",
+  "play": "Play",
+  "settings": "Settings 🌐",
+  "selectLanguage": "Select Language"
 }
