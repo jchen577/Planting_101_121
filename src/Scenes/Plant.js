@@ -68,7 +68,7 @@ export class Plant extends Scene {
     changePlantable(
       (this.plantObject.x - 32) / 64,
       (this.plantObject.y - 32) / 64,
-      true
+      true,
     );
 
     scene.updateInventoryUI();
@@ -80,7 +80,7 @@ export class Plant extends Scene {
     changePlantable(
       (this.plantObject.x - 32) / 64,
       (this.plantObject.y - 32) / 64,
-      true
+      true,
     );
   }
 
@@ -90,7 +90,7 @@ export class Plant extends Scene {
         posX * 64 + 32,
         posY * 64 + 32,
         "all_tiles",
-        this.sprout
+        this.sprout,
       );
       this.position = [posX, posY];
       changePlantable(posX, posY, false);
