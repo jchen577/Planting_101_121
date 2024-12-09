@@ -7,6 +7,7 @@ import { AutoSaveManager } from "./AutoSaveManager.js";
 import { generateMap, getPlayerTileAttributes, level } from "./GenerateMap.js";
 import { generateTileAttributes } from "./TileGeneration.js";
 import { Plant, redShroom, snowTree, cactus, PlantBuilder } from "./Plant.js";
+import { loadGameSettings } from "./YAMLInterpreter.js";
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -57,12 +58,83 @@ export class GameScene extends Phaser.Scene {
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-    const mapWidth = 50 * 64;
-    const mapHeight = 50 * 64;
+    let mapWidth = 50 * 64;
+    let mapHeight = 50 * 64;
     this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+
+    loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
+      .then((gameConfig) => {
+        // Access attributes after the Promise has resolved
+        mapWidth = gameConfig.tutorial.grid_size[0] * 64;
+        mapHeight = gameConfig.tutorial.grid_size[1] * 64;
+        this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+        this.player.setPosition(mapWidth / 2, mapHeight / 2);
+        this.player.setDepth(1);
+      })
+      .catch((error) => {
+        console.error("Error loading game settings:", error);
+      });
 
     //Mobile movement
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      const circleButton = this.add
+        .circle(
+          this.cameras.main.width / 2 + 200,
+          this.cameras.main.height / 2 + 100,
+          50,
+          0,
+        )
+        .setDepth(1)
+        .setScrollFactor(0)
+        .setInteractive();
+      const circleText = this.add
+        .text(
+          this.cameras.main.width / 2 + 180,
+          this.cameras.main.height / 2 + 90,
+          "Plant",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+          },
+        )
+        .setDepth(1)
+        .setScrollFactor(0);
+      circleButton.on("pointerdown", () => {
+        const randomPlant = Math.floor(Math.random() * 3);
+        let newPlant = null;
+
+        if (randomPlant === 0) {
+          newPlant = new redShroom(115);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(3)
+            .setMoistureRequired(2)
+            .setSunRequired(2)
+            .setGrownImage(115);
+        } else if (randomPlant === 1) {
+          newPlant = new cactus(38);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(4)
+            .setMoistureRequired(2)
+            .setSunRequired(4)
+            .setGrownImage(38);
+        } else {
+          newPlant = new snowTree(123);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(5)
+            .setMoistureRequired(4)
+            .setSunRequired(2)
+            .setGrownImage(123);
+        }
+
+        const currPos = getPlayerTileAttributes(this.player);
+        const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
+        if (plantHolder != null) {
+          this.plants.push(plantHolder);
+          addState(this, this.undoStack);
+          this.redoStack = [];
+        }
+      });
       const leftButton = this.add
         .text(
           this.cameras.main.width / 2 - 80,
@@ -74,7 +146,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 50,
           },
         )
-        .setInteractive();
+        .setInteractive()
+        .setDepth(1);
       leftButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x - 10, this.player.y);
@@ -92,7 +165,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 50,
           },
         )
-        .setInteractive();
+        .setInteractive()
+        .setDepth(1);
       rightButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x + 10, this.player.y);
@@ -109,7 +183,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 70,
           },
         )
-        .setInteractive();
+        .setInteractive()
+        .setDepth(1);
       upButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x, this.player.y - 10);
@@ -127,13 +202,16 @@ export class GameScene extends Phaser.Scene {
             fontSize: 70,
           },
         )
-        .setInteractive();
+        .setInteractive()
+        .setDepth(1);
       downButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x, this.player.y + 10);
         })
         .setScrollFactor(0);
     }
+
+    //Buttons
     const turnButton = this.add.text(10, 10, this.langData.timeMessage, {
       color: "#0f0",
       backgroundColor: "black",
@@ -146,6 +224,7 @@ export class GameScene extends Phaser.Scene {
         this.redoStack = [];
       })
       .setScrollFactor(0);
+    turnButton.setDepth(1);
 
     this.levelInfo = this.add
       .text(10, 30, `${this.langData.sun}: 0, ${this.langData.water}: 0`, {
@@ -155,6 +234,7 @@ export class GameScene extends Phaser.Scene {
         padding: { x: 10, y: 5 },
       })
       .setScrollFactor(0);
+    this.levelInfo.setDepth(1);
 
     this.inventoryText = this.add
       .text(10, 60, `${this.langData.inventory}:`, {
@@ -164,6 +244,7 @@ export class GameScene extends Phaser.Scene {
         padding: { x: 10, y: 5 },
       })
       .setScrollFactor(0);
+    this.inventoryText.setDepth(1);
 
     const saveButton = this.add.text(10, 570, this.langData.save, {
       color: "#0f0",
@@ -175,6 +256,7 @@ export class GameScene extends Phaser.Scene {
         saveGameState(this);
       })
       .setScrollFactor(0);
+    saveButton.setDepth(1);
 
     const loadButton = this.add.text(10, 600, this.langData.load, {
       color: "#0f0",
@@ -182,6 +264,7 @@ export class GameScene extends Phaser.Scene {
     });
     loadButton.setInteractive().on("pointerdown", () => loadGameState(this));
     loadButton.setScrollFactor(0);
+    loadButton.setDepth(1);
 
     const undoButton = this.add.text(10, 510, this.langData.undo, {
       color: "#0f0",
@@ -197,6 +280,7 @@ export class GameScene extends Phaser.Scene {
         }
       })
       .setScrollFactor(0);
+    undoButton.setDepth(1);
 
     const redoButton = this.add.text(10, 540, this.langData.redo, {
       color: "#0f0",
@@ -212,6 +296,7 @@ export class GameScene extends Phaser.Scene {
         }
       })
       .setScrollFactor(0);
+    redoButton.setDepth(1);
 
     this.autoSaveManager = new AutoSaveManager(this);
     this.autoSaveManager.startAutoSave();
