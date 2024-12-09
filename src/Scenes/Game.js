@@ -30,20 +30,11 @@ export class GameScene extends Phaser.Scene {
       snowTree: 0,
     };
     this.inventoryText = null;
-    this.langData = null;
+    this.langData;
   }
 
   init(data) {
     this.selectedLang = data.selectedLang || "lang_eng.json"; // Default to English if not provided
-  }
-
-  createButton(x, y, label, callback) {
-    return this.add
-      .text(x, y, label, { color: "#0f0", backgroundColor: "black" })
-      .setInteractive()
-      .on("pointerdown", callback)
-      .setScrollFactor(0)
-      .setDepth(1);
   }
 
   create() {
@@ -58,8 +49,12 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.setFollowOffset(0, 0);
 
     this.forward = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.backward = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.plant = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.backward = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.S,
+    );
+    this.plant = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
+    );
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
@@ -69,6 +64,7 @@ export class GameScene extends Phaser.Scene {
 
     loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
       .then((gameConfig) => {
+        // Access attributes after the Promise has resolved
         mapWidth = gameConfig.tutorial.grid_size[0] * 64;
         mapHeight = gameConfig.tutorial.grid_size[1] * 64;
         this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
@@ -79,11 +75,6 @@ export class GameScene extends Phaser.Scene {
         console.error("Error loading game settings:", error);
       });
 
-    // Game Buttons
-    this.createButton(10, 10, this.langData.timeMessage, () => {
-      this.advanceTurn();
-      addState(this, this.undoStack);
-      this.redoStack = [];
     //Mobile movement
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
       const circleButton = this.add
@@ -96,6 +87,7 @@ export class GameScene extends Phaser.Scene {
         .setDepth(1)
         .setScrollFactor(0)
         .setInteractive();
+        
       const circleText = this.add
         .text(
           this.cameras.main.width / 2 + 180,
@@ -148,9 +140,8 @@ export class GameScene extends Phaser.Scene {
       // Movement buttons
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height - 150; // Adjust vertical anchor point
-        const buttonOffset = 80; // Distance between buttons
+        const buttonOffset = 50; // Distance between buttons
       
-        // Up Button
         this.createMobileButton(
           centerX,
           centerY - buttonOffset, // Place above the center
@@ -161,7 +152,6 @@ export class GameScene extends Phaser.Scene {
           "40px"
         );
       
-        // Down Button
         this.createMobileButton(
           centerX,
           centerY + buttonOffset, // Place below the center
@@ -171,8 +161,7 @@ export class GameScene extends Phaser.Scene {
           },
           "40px"
         );
-      
-        // Left Button
+  
         this.createMobileButton(
           centerX - buttonOffset, // Place to the left of the center
           centerY,
@@ -183,7 +172,6 @@ export class GameScene extends Phaser.Scene {
           "40px"
         );
       
-        // Right Button
         this.createMobileButton(
           centerX + buttonOffset, // Place to the right of the center
           centerY,
@@ -200,6 +188,15 @@ export class GameScene extends Phaser.Scene {
       color: "#0f0",
       backgroundColor: "black",
     });
+    turnButton.setInteractive();
+    turnButton
+      .on("pointerdown", () => {
+        this.advanceTurn();
+        addState(this, this.undoStack);
+        this.redoStack = [];
+      })
+      .setScrollFactor(0);
+    turnButton.setDepth(1);
 
     this.levelInfo = this.add
       .text(10, 30, `${this.langData.sun}: 0, ${this.langData.water}: 0`, {
@@ -208,8 +205,8 @@ export class GameScene extends Phaser.Scene {
         backgroundColor: "#000000",
         padding: { x: 10, y: 5 },
       })
-      .setScrollFactor(0)
-      .setDepth(1);
+      .setScrollFactor(0);
+    this.levelInfo.setDepth(1);
 
     this.inventoryText = this.add
       .text(10, 60, `${this.langData.inventory}:`, {
@@ -218,33 +215,89 @@ export class GameScene extends Phaser.Scene {
         backgroundColor: "#000000",
         padding: { x: 10, y: 5 },
       })
-      .setScrollFactor(0)
-      .setDepth(1);
+      .setScrollFactor(0);
+    this.inventoryText.setDepth(1);
 
-    this.createButton(10, 570, this.langData.save, () => saveGameState(this));
-    this.createButton(10, 600, this.langData.load, () => loadGameState(this));
-    this.createButton(10, 510, this.langData.undo, () => {
-      const state = this.undoStack.pop();
-      if (state) {
-        this.redoStack.push(state);
-        loadState(this, state);
-      }
+    const saveButton = this.add.text(10, 570, this.langData.save, {
+      color: "#0f0",
+      backgroundColor: "black",
     });
-    this.createButton(10, 540, this.langData.redo, () => {
-      const state = this.redoStack.pop();
-      if (state) {
-        this.undoStack.push(state);
-        loadState(this, state);
-      }
+    saveButton.setInteractive();
+    saveButton
+      .on("pointerdown", () => {
+        saveGameState(this);
+      })
+      .setScrollFactor(0);
+    saveButton.setDepth(1);
+
+    const loadButton = this.add.text(10, 600, this.langData.load, {
+      color: "#0f0",
+      backgroundColor: "black",
     });
+    loadButton.setInteractive().on("pointerdown", () => loadGameState(this));
+    loadButton.setScrollFactor(0);
+    loadButton.setDepth(1);
+
+    const undoButton = this.add.text(10, 510, this.langData.undo, {
+      color: "#0f0",
+      backgroundColor: "black",
+    });
+    undoButton.setInteractive();
+    undoButton
+      .on("pointerdown", () => {
+        const state = this.undoStack.pop();
+        if (state) {
+          this.redoStack.push(state);
+          loadState(this, state);
+        }
+      })
+      .setScrollFactor(0);
+    undoButton.setDepth(1);
+
+    const redoButton = this.add.text(10, 540, this.langData.redo, {
+      color: "#0f0",
+      backgroundColor: "black",
+    });
+    redoButton.setInteractive();
+    redoButton
+      .on("pointerdown", () => {
+        const state = this.redoStack.pop();
+        if (state) {
+          this.undoStack.push(state);
+          loadState(this, state);
+        }
+      })
+      .setScrollFactor(0);
+    redoButton.setDepth(1);
 
     this.autoSaveManager = new AutoSaveManager(this);
     this.autoSaveManager.startAutoSave();
 
     const autoSave = localStorage.getItem("auto-save");
-    if (autoSave && confirm("Do you want to continue where you left off?")) {
-      loadGameState(this, "auto-save");
+    if (autoSave) {
+      const userWantsToContinue = confirm(
+        "Do you want to continue where you left off?",
+      );
+      if (userWantsToContinue) {
+        loadGameState(this, "auto-save");
+      }
     }
+  }
+
+  createMobileButton(x, y, label, callback) {
+    const button = this.add
+      .text(x, y, label, {
+        color: "#0f0",
+        backgroundColor: "black",
+        fontSize: "50px",
+        padding: { x: 10, y: 5 },
+      })
+      .setInteractive()
+      .setScrollFactor(0)
+      .setDepth(1);
+  
+    button.on("pointerdown", callback);
+    return button;
   }
 
   updateInventoryUI() {
