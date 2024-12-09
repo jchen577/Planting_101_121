@@ -230,4 +230,3 @@ We anticipate that implementing procedural generation and ensuring that it integ
 [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
 [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
 [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
-
