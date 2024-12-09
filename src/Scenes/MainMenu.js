@@ -8,8 +8,8 @@ export class MainMenu extends Phaser.Scene {
 
   preload() {
     // Load background and additional image assets
-    this.load.image("background", "public/assets/galaxyBG.jpeg");
-    this.load.image("earth", "public/assets/earthPixel.png"); // Replace with the path to your image
+    this.load.image("background", "assets/galaxyBG.jpeg");
+    this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
   }
 
   create() {
