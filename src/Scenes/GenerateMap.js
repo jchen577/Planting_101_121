@@ -16,7 +16,7 @@ export function generateMap(scene) {
   let colSize = 50;
 
   // Load configuration from YAML
-  const gameConfig = loadGameSettings("./GameSettings.yaml");
+  const gameConfig = loadGameSettings("./src/Scenes/GameSettings.yaml");
   if (gameConfig) {
     rowSize = gameConfig.tutorial.grid_size[0];
     colSize = gameConfig.tutorial.grid_size[1];
