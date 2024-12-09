@@ -7,6 +7,7 @@ import { AutoSaveManager } from "./AutoSaveManager.js";
 import { generateMap, getPlayerTileAttributes, level } from "./GenerateMap.js";
 import { generateTileAttributes } from "./TileGeneration.js";
 import { Plant, redShroom, snowTree, cactus, PlantBuilder } from "./Plant.js";
+import { loadGameSettings } from "./YAMLInterpreter.js";
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -57,9 +58,22 @@ export class GameScene extends Phaser.Scene {
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-    const mapWidth = 50 * 64;
-    const mapHeight = 50 * 64;
+    let mapWidth = 50 * 64;
+    let mapHeight = 50 * 64;
     this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+
+    loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
+      .then(gameConfig => {
+        // Access attributes after the Promise has resolved
+        mapWidth = gameConfig.tutorial.grid_size[0] * 64;
+        mapHeight = gameConfig.tutorial.grid_size[1] * 64;
+        this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+        this.player.setPosition(mapWidth/2, mapHeight/2);
+        this.player.setDepth(1);
+      })
+      .catch(error => {
+        console.error("Error loading game settings:", error);
+    });
 
     //Mobile movement
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {

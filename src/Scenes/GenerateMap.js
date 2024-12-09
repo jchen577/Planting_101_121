@@ -8,24 +8,31 @@ const sampleScale = 10;
 let layer = null;
 export const level = [];
 
+
 // Initialize noise seed
 noise.seed(Math.random());
 
-export function generateMap(scene) {
-  let rowSize = 50;
-  let colSize = 50;
+// Load configuration from YAML
+function load() {
+  
+}
 
-  // Load configuration from YAML
-  loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
-    .then(gameConfig => {
-        // Access attributes after the Promise has resolved
-        console.log(gameConfig); // The complete parsed object
-        rowSize = gameConfig.tutorial.grid_size[0];
-        colSize = gameConfig.tutorial.grid_size[1];
-    })
-    .catch(error => {
-        console.error("Error loading game settings:", error);
-    });
+export async function generateMap(scene) {
+let rowSize = 50;
+let colSize = 50;
+
+await loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
+  .then(gameConfig => {
+    // Access attributes after the Promise has resolved
+    console.log(gameConfig); // The complete parsed object
+    rowSize = gameConfig.tutorial.grid_size[0];
+    colSize = gameConfig.tutorial.grid_size[1];
+  })
+  .catch(error => {
+    console.error("Error loading game settings:", error);
+  });
+  load();
+
   for (let y = 0; y < colSize; y++) {
     const row = [];
     for (let x = 0; x < rowSize; x++) {

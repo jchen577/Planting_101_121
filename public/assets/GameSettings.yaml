@@ -1,8 +1,8 @@
 ---
 tutorial:
   grid_size:
-  - 50
-  - 50
+  - 5
+  - 5
   available_plants:
   - redshroom
   - cactus
