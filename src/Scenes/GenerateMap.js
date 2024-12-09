@@ -16,12 +16,16 @@ export function generateMap(scene) {
   let colSize = 50;
 
   // Load configuration from YAML
-  const gameConfig = loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml");
-  if (gameConfig) {
-    rowSize = gameConfig.tutorial.grid_size[0];
-    colSize = gameConfig.tutorial.grid_size[1];
-  }
-
+  loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
+    .then(gameConfig => {
+        // Access attributes after the Promise has resolved
+        console.log(gameConfig); // The complete parsed object
+        rowSize = gameConfig.tutorial.grid_size[0];
+        colSize = gameConfig.tutorial.grid_size[1];
+    })
+    .catch(error => {
+        console.error("Error loading game settings:", error);
+    });
   for (let y = 0; y < colSize; y++) {
     const row = [];
     for (let x = 0; x < rowSize; x++) {
