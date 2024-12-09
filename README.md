@@ -1,46 +1,186 @@
-# Devlog Entry - [11/27/2024]  
+# F3. Devlog Entry - [12/06/2024]  
 ## How we satisfied the software requirements
-- [F0] Everything that we implimented to satisfy the F0 software requirements have stayed consisten. Thus, the requirements are met using what we created last week.
+### F0+F1+F2
+Our implementations for F0, F1, and F2 software requirements have stayed consistent. The game still has the same tile structure, gameplay, and the autosave/manual functionality as before. We also still have our YAML external DSL and internal DSL working for the current iteration of the game. The current game is also fully in Javascript for the platform switch. 
 
-- [F1.a] Game is stored in a grid state as our grid is made of tile objects. 
+### [F3.a] Internationalization
+Our game has three language options and it display and option for the player to switch the game language in the home screen. Once a language option is selected, the text of the entire game will be translated to that language. We did this through using JSON files for each of the languages. Each file has the game objects containing localized translations for the interface text of the game. The main menu of the game allows the player to select the language they want and the corresponding JSON file will be parsed in for internalization.
+
+### [F3.b] Localization
+Our game is localized to English, Japanese, and Arabic. Japanese for the right to left requirement and Arabic for the logographic script requirement. Each file has the game objects and game keys containing localized translations for the interface text of the game. Our use of JSON files to achieve this allows us to dynamically switch the UI between the three languages implemented. The player can switch between the languages in the main menu of the game. We were able to translate the game through the use of Chatgpt for the Arabic translation and one of our group members has knowledge on Japanese. 
+
+### [F3.c] Mobile Installation
+When game is deployed from Github, the player can install the game onto their smartphone by hitting the share button on their browser. The game can be installed by them hitting the "add to home screen" button which will download the app onto their phone to be playable on their smartphone device. We used the help of Brace to achieve the installable functionality. 
+
+### [F3.d] Mobile Play (Offline)
+We needed to change the grid size and scale by minimizing it so our game can be playable on a smartphone device. We also implemented move arrows for the player so they can navigate their way around the game without a keyboard. Our game runs offline without any issues so we didn't need to make any changes to implement that. 
+
+## Reflections 
+We made a lot of reconsiderations for this round of development as we were having issues with the build of deployment environment. Our concern was that using the Deno runtime was causing issues with our deployment environement. The game not being able to properly deploy our assets into GitHub initially caused our game installation implementation to not work. We ended up using Brace to help refactor our code to help fix our build issue which alleviated our plan of  making a new repository and switching to live server. As our game evolved we had to think about how we could most easily implement localization for the player. We decided the easiest way to implement this is just allowing the player switch their language option in settings. We also needed to make the grid scale of our game executable in a mobile format which made us refactor our game design. 
+
+# F2. Devlog Entry - [12/02/2024]  
+## How we satisfied the software requirements
+### F0+F1
+ Everything that we implimented to satisfy the F0 and F1 software requirements have stayed consistent. Thus, the requirements are met using what we created last week. The game still has the same tile structure, gameplay, and the autosave/manual save both still work as they did last week. 
+
+### [F2.a] External DSL for Scenario Design
+For our external DSL design we decided to based it on YAML. Our design is pretty simple in that it takes in the grid size, available plants, win conditions, and human instructions. 
+
+Example Scenario: 
+```# Defines the dimensions of the playable grid
+grid_size:
+  - 50  # Width of the grid
+  - 50  # Height of the grid
+
+# Lists the types of plants that can be grown in this scenario
+available_plants:
+  - redshroom, cactus, snowtree  # Plant types available to the player
+
+# Specifies the victory requirements
+win_conditions:
+  - - any  # Any type of plant is acceptable to meet the goal
+    - min  # Minimum requirement for the next value
+    - 10   # At least 10 plants must be grown to win
+
+# Provides plain language instructions for the player
+human_instructions: grow at least 10 plants
+```
+Natural Language Translation:
+* grid_size: Defines the dimensions of the playable grid. In this example, the grid is 50x50 units.
+* available_plants: Lists the types of plants that can be grown in this scenario. Here, the options are "redshroom," "cactus," and "snowtree."
+* win_conditions: Specifies the victory requirements.
+any indicates that any type of plant is acceptable to meet the goal.
+* min sets the minimum number of plants required to win the scenario, which is 10 in this case.
+* human_instructions: Provides plain language guidance for the player. In this example, the objective is to "grow at least 10 plants."
+
+### [F2.b]  Internal DSL for Plants and Growth Conditions
+Our internal DSL is built with JavaScript using the Phaser framework. It simplifies gameplay mechanics like plant generation, state management, and win conditions. Players can create random plants (e.g.redShroom, cactus, or snowTree) using a PlantBuilder to configure growth and environmental needs. The DSL also enables features like undo/redo with simple calls to addState and loadState. By embedding the DSL in the host language, we can directly access the engine features without the complexity of parsing external formats. 
+
+Code Snippet: 
+```
+/* ... */
+// Planting random plant
+if (Phaser.Input.Keyboard.JustDown(this.plant)) {
+  const plantTypes = [redShroom, cactus, snowTree];
+  const PlantClass = plantTypes[Math.floor(Math.random() * plantTypes.length)];
+  const newPlant = new PlantClass();
+  new PlantBuilder(newPlant)
+    .setGrowthLevel(3)
+    .setMoistureRequired(2)
+    .setSunRequired(2)
+    .setGrownImage(PlantClass.imageID);
+
+  const position = getPlayerTileAttributes(this.player);
+  const planted = newPlant.plant(this, position[1], position[0]);
+
+  if (planted) {
+    this.plants.push(planted);
+    addState(this, this.undoStack); // Save the state for undo
+    this.redoStack = []; // Clear redo stack after a new action
+  }
+}
+
+// Undo the last action -> Undo Functionality 
+undoButton.on("pointerdown", () => {
+  const previousState = this.undoStack.pop();
+  if (previousState) {
+    this.redoStack.push(previousState);
+    loadState(this, previousState); // Restore the previous game state
+  }
+});
+/* ... */
+```
+
+Natural Language Explanation:
+* Planting a Random Plant:
+When the player presses the plant button, a random plant type (redShroom, cactus, or snowTree) is selected.
+A PlantBuilder object customizes the plant’s growth level, moisture, and sunlight requirements before placing it on the map at the player’s current position.
+The planted object is added to the game’s list of plants, and the game’s state is saved to allow undoing the action later.
+
+* Undo Functionality:
+The undo button allows players to revert their last action by restoring the previous state from the undo stack.
+After undoing, the reverted state is saved to the redo stack, enabling players to redo actions if needed.
+
+### [F2.c] Switch to Alternate Platform
+We ported our project from TypeScript to JavaScript by changing the file types in our development environment and refactoring the code based on the errors in our console. Luckily most of our porting just involved simplifying the code by removing type annotations which still allowed us to preserve functionality. Our alternate platform did not changed. The concepts that needed to be restructured were TypeScript’s type annotations that occured in places like our Plant class. It just needed to be replaced with careful variable initialization and runtime checks in JavaScript so that the code maintains the same functionality. 
+
+Porting Examples: 
+* The TypeScript function function generateAttributes(tile: Tile): void was simplified to function generateAttributes(tile) in JavaScript, relying on dynamic typing:
+
+TypeScript:
+```
+function generateAttributes(tile: Tile): void {
+    tile.sunLevel = Math.floor(Math.random() * 5);
+}
+```
+JavaScript:
+```
+function generateAttributes(tile) {
+    tile.sunLevel = Math.floor(Math.random() * 5);
+}
+```
+* Classes like Plant transferred seamlessly, requiring only the removal of TypeScript-specific modifiers like private and public:
+
+TypeScript:
+```
+export class Plant {
+    private growthLevel: number = 0;
+}
+``` 
+JavaScript:
+```
+export class Plant {
+    constructor() {
+        this.growthLevel = 0;
+    }
+}
+```
+## Reflection
+Looking back at our new F2 requirements, our teams plan hasn't changed much except for the new implementation of the internal and external DSL's. It definitely forced us to restructure our code so that the program is much more organized and takes in more specific inputs. The switch from TypeScript to JavaScript did help simplify our development process by removing the need for compilation and type definitions. It allowed for quicker iteration and testing. At this point, we haven't reconsidered our tools and materials described. We still are using Perlin noise for our map generation. For our roles, we alternate our tasks throughout the week so we haven't been strictly following the role assignments. In terms of game design evolution, we are looking into adding more visual stages of growth for our plants to make it easier to for players to understand when the plants can be harvested. 
+
+# F1. Devlog Entry - [11/27/2024]  
+## How we satisfied the software requirements
+### [F0] Everything that we implimented to satisfy the F0 software requirements have stayed consistent. Thus, the requirements are met using what we created last week.
+
+### [F1.a] Game is stored in a grid state as our grid is made of tile objects. 
   * The games grid is backed by a contiguous byte array in an AoS format as each tile is treated as an object with grouped attributes.
 
   ![F1.a data structure diagram](./dataStructure.png)
 
-- [F1.b] Player can manually save their game progress by clicking on the "Save Game" button. 
+### [F1.b] Player can manually save their game progress by clicking on the "Save Game" button. 
   * Once "Save Game" button is clicked, game is saved by downloading JSON file of game state in players browser. Important game state data such as player location, inventory, and the entire map is formated in a AoS in the JSON file. If the player wishes to load the save file, they simply have to press load and select the save file.
 
-- [F1.c] Game automatically saves state of game every 2 mins. Player is prompted with request of downloading multiple files upon opening game. It gets saved among the manual save entries. 
+### [F1.c] Game automatically saves state of game every 2 mins. Player is prompted with request of downloading multiple files upon opening game. It gets saved among the manual save entries. 
   * A JSON file of game is automatically downloaded into the players browser saving game state every 2 mins. 
 
-- [F1.d] The player is able to undo every major choice. 
+### [F1.d] The player is able to undo every major choice. 
   * New game state gets loaded once undo is selected. 
 
 ## Reflection: 
 Looking back at our new F1 requirements, our teams plan hasn't changed much except for the new implementation of saving game states. With our usage of Perlin Noise, we were able to have our grid be set up of tile objects and it make AoS format and byte array storage requirement work in our favor. In terms of the new game state implementation we structured it so we can build on top of our existing workflow. Originally, we were going to use JSON files in conjuction with "Tiled" to create and save our map. But, due to the fact that we have changed from a "Tiled" created map to a Perlin noise PCG map, our use of JSON files, while still in line with saving the game state, has been inplimented to fit the way our PCG map is created (i.e. using our "Tile" structure).
 
-# Devlog Entry - [11/22/2024]  
+# F0. Devlog Entry - [11/22/2024]  
 
 ## How we satisfied the software requirements
--[F0.a]: You control a character moving over a 2D grid.
+### [F0.a]: You control a character moving over a 2D grid.
   * Using Perlin noise, a procedurally generated 2D map is created out of dirt, sand, or snow tiles. The player can continuously control a character using WASD over the 2D grid of tiles.
 
--[F0.b]: You advance time manually in the turn-based simulation.
+### [F0.b]: You advance time manually in the turn-based simulation.
   * The player clicks the Advance Time button to move on to the next turn.
 
--[F0.c]: You can reap or sow plants on grid cells only when you are near them.
+### [F0.c]: You can reap or sow plants on grid cells only when you are near them.
   * Using the space button, the player can only sow plants on the tile they are positioned on top of. Additionally, players can reap/harvest a fully grown plant from a distance by clicking with their mouse cursor.
 
--[F0.d]: Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+### [F0.d]: Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
   * The sun and water level of a cell is determined when the player advances time via the "Advance Time" button.
 
--[F0.e]: Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+### [F0.e]: Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
   * There are three plants: mushrooms, trees, and cacti. They share the same sprite for levels 1 and 2, but once they reach full maturity (i.e. level 3) they will sprout into their distinct plant type.
 
--[F0.f]: Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+### [F0.f]: Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
   * The sun and water levels of the tile determine if the plant progresses in the growth stage (i.e. if they were greater or equal to 3 and 2 respectively).
 
--[F0.g]: A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+### [F0.g]: A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
   * The player "wins" when they have harvested 10 plants.
 
 ## Reflection
@@ -84,3 +224,4 @@ We anticipate that implementing procedural generation and ensuring that it integ
 [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
 [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
 [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+
