@@ -6,24 +6,24 @@ export class MainMenu extends Phaser.Scene {
     this.selectedLang = "lang_en";
   }
 
-  preload() {
-    // Load background and additional image assets
-    this.load.image("background", "assets/galaxyBG.jpeg");
-    this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
-  }
+  // preload() {
+  //   // Load background and additional image assets
+  //   this.load.image("background", "assets/galaxyBG.jpeg");
+  //   this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
+  // }
 
   create() {
 
    
     // Add the background image
-    this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, "background")
-      .setOrigin(0.5)
-      .setDisplaySize(this.cameras.main.width, this.cameras.main.height * 2); // Scale to fit the screen
+    // this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, "background")
+    //   .setOrigin(0.5)
+    //   .setDisplaySize(this.cameras.main.width, this.cameras.main.height * 2); // Scale to fit the screen
 
-    const earth = this.add.image(this.cameras.main.centerX - 200, 600, "earth") 
-      .setOrigin(0.5);
+    // const earth = this.add.image(this.cameras.main.centerX - 200, 600, "earth") 
+    //   .setOrigin(0.5);
 
-    earth.setScale(); 
+    // earth.setScale(); 
     this.langData = this.cache.json.get(this.selectedLang);
 
     // Add the title
