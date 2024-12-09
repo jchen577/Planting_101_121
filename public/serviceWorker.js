@@ -8,6 +8,8 @@ const urlsToCache = [
   `${BASE_URL}/src/Scenes/GenerateMap.js`,
   `${BASE_URL}/src/Scenes/Game.js`,
   `${BASE_URL}/assets/player.png`,
+  `${BASE_URL}/assets/galaxyBG.jpeg`, // Added background
+  `${BASE_URL}/assets/earthPixel.png`, // Added earth
 ];
 
 self.addEventListener("install", (event) => {

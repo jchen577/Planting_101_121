@@ -14,8 +14,7 @@ export class MainMenu extends Phaser.Scene {
 
   create() {
 
-    this.load.image("background", "assets/galaxyBG.jpeg");
-    this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
+   
     // Add the background image
     this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, "background")
       .setOrigin(0.5)
