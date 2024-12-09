@@ -148,6 +148,8 @@ export class GameScene extends Phaser.Scene {
         })
         .setScrollFactor(0);
     }
+
+    //Buttons
     const turnButton = this.add.text(10, 10, this.langData.timeMessage, {
       color: "#0f0",
       backgroundColor: "black",
@@ -160,6 +162,7 @@ export class GameScene extends Phaser.Scene {
         this.redoStack = [];
       })
       .setScrollFactor(0);
+    turnButton.setDepth(1);
 
     this.levelInfo = this.add
       .text(10, 30, `${this.langData.sun}: 0, ${this.langData.water}: 0`, {
@@ -169,6 +172,7 @@ export class GameScene extends Phaser.Scene {
         padding: { x: 10, y: 5 },
       })
       .setScrollFactor(0);
+    this.levelInfo.setDepth(1);
 
     this.inventoryText = this.add
       .text(10, 60, `${this.langData.inventory}:`, {
@@ -178,6 +182,7 @@ export class GameScene extends Phaser.Scene {
         padding: { x: 10, y: 5 },
       })
       .setScrollFactor(0);
+    this.inventoryText.setDepth(1);
 
     const saveButton = this.add.text(10, 570, this.langData.save, {
       color: "#0f0",
@@ -189,6 +194,7 @@ export class GameScene extends Phaser.Scene {
         saveGameState(this);
       })
       .setScrollFactor(0);
+    saveButton.setDepth(1);
 
     const loadButton = this.add.text(10, 600, this.langData.load, {
       color: "#0f0",
@@ -196,6 +202,7 @@ export class GameScene extends Phaser.Scene {
     });
     loadButton.setInteractive().on("pointerdown", () => loadGameState(this));
     loadButton.setScrollFactor(0);
+    loadButton.setDepth(1);
 
     const undoButton = this.add.text(10, 510, this.langData.undo, {
       color: "#0f0",
@@ -211,6 +218,7 @@ export class GameScene extends Phaser.Scene {
         }
       })
       .setScrollFactor(0);
+    undoButton.setDepth(1);
 
     const redoButton = this.add.text(10, 540, this.langData.redo, {
       color: "#0f0",
@@ -226,6 +234,7 @@ export class GameScene extends Phaser.Scene {
         }
       })
       .setScrollFactor(0);
+    redoButton.setDepth(1);
 
     this.autoSaveManager = new AutoSaveManager(this);
     this.autoSaveManager.startAutoSave();
