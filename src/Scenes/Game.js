@@ -84,6 +84,121 @@ export class GameScene extends Phaser.Scene {
       this.advanceTurn();
       addState(this, this.undoStack);
       this.redoStack = [];
+    //Mobile movement
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      const circleButton = this.add
+        .circle(
+          this.cameras.main.width / 2 + 200,
+          this.cameras.main.height / 2 + 100,
+          50,
+          0,
+        )
+        .setDepth(1)
+        .setScrollFactor(0)
+        .setInteractive();
+      const circleText = this.add
+        .text(
+          this.cameras.main.width / 2 + 180,
+          this.cameras.main.height / 2 + 90,
+          "Plant",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+          },
+        )
+        .setDepth(1)
+        .setScrollFactor(0);
+      circleButton.on("pointerdown", () => {
+        const randomPlant = Math.floor(Math.random() * 3);
+        let newPlant = null;
+
+        if (randomPlant === 0) {
+          newPlant = new redShroom(115);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(3)
+            .setMoistureRequired(2)
+            .setSunRequired(2)
+            .setGrownImage(115);
+        } else if (randomPlant === 1) {
+          newPlant = new cactus(38);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(4)
+            .setMoistureRequired(2)
+            .setSunRequired(4)
+            .setGrownImage(38);
+        } else {
+          newPlant = new snowTree(123);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(5)
+            .setMoistureRequired(4)
+            .setSunRequired(2)
+            .setGrownImage(123);
+        }
+
+        const currPos = getPlayerTileAttributes(this.player);
+        const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
+        if (plantHolder != null) {
+          this.plants.push(plantHolder);
+          addState(this, this.undoStack);
+          this.redoStack = [];
+        }
+      });
+
+      // Movement buttons
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height - 150; // Adjust vertical anchor point
+        const buttonOffset = 80; // Distance between buttons
+      
+        // Up Button
+        this.createMobileButton(
+          centerX,
+          centerY - buttonOffset, // Place above the center
+          "↑",
+          () => {
+            this.player.setPosition(this.player.x, this.player.y - 10);
+          },
+          "40px"
+        );
+      
+        // Down Button
+        this.createMobileButton(
+          centerX,
+          centerY + buttonOffset, // Place below the center
+          "↓",
+          () => {
+            this.player.setPosition(this.player.x, this.player.y + 10);
+          },
+          "40px"
+        );
+      
+        // Left Button
+        this.createMobileButton(
+          centerX - buttonOffset, // Place to the left of the center
+          centerY,
+          "←",
+          () => {
+            this.player.setPosition(this.player.x - 10, this.player.y);
+          },
+          "40px"
+        );
+      
+        // Right Button
+        this.createMobileButton(
+          centerX + buttonOffset, // Place to the right of the center
+          centerY,
+          "→",
+          () => {
+            this.player.setPosition(this.player.x + 10, this.player.y);
+          },
+          "40px"
+        );
+      }
+      
+    //Buttons
+    const turnButton = this.add.text(10, 10, this.langData.timeMessage, {
+      color: "#0f0",
+      backgroundColor: "black",
     });
 
     this.levelInfo = this.add
