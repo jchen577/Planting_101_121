@@ -6,13 +6,18 @@ export class MainMenu extends Phaser.Scene {
     this.selectedLang = "lang_en";
   }
 
-  preload() {
-    // Load background and additional image assets
-    this.load.image("background", "assets/galaxyBG.jpeg");
-    this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
-  }
+  // preload() {
+  //   // Load background and additional image assets
+  //   this.load.image("background", "assets/galaxyBG.jpeg");
+  //   this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
+  // }
 
   create() {
+
+    this.load.image("background", "assets/galaxyBG.jpeg");
+    this.load.image("earth", "assets/earthPixel.png"); // Replace with the path to your image
+
+    this.load.start(); 
     // Add the background image
     this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, "background")
       .setOrigin(0.5)
