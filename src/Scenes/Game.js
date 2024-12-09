@@ -75,50 +75,66 @@ export class GameScene extends Phaser.Scene {
         console.error("Error loading game settings:", error);
       });
 
-    // Mobile movement
+    //Mobile movement
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      // Plant button
-      this.createMobileButton(
-        this.cameras.main.width / 2 + 200,
-        this.cameras.main.height / 2 + 100,
-        "Plant",
-        () => {
-          const randomPlant = Math.floor(Math.random() * 3);
-          let newPlant = null;
+      const circleButton = this.add
+        .circle(
+          this.cameras.main.width / 2 + 200,
+          this.cameras.main.height / 2 + 100,
+          50,
+          0,
+        )
+        .setDepth(1)
+        .setScrollFactor(0)
+        .setInteractive();
+      const circleText = this.add
+        .text(
+          this.cameras.main.width / 2 + 180,
+          this.cameras.main.height / 2 + 90,
+          "Plant",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+          },
+        )
+        .setDepth(1)
+        .setScrollFactor(0);
+      circleButton.on("pointerdown", () => {
+        const randomPlant = Math.floor(Math.random() * 3);
+        let newPlant = null;
 
-          if (randomPlant === 0) {
-            newPlant = new redShroom(115);
-            new PlantBuilder(newPlant)
-              .setGrowthLevel(3)
-              .setMoistureRequired(2)
-              .setSunRequired(2)
-              .setGrownImage(115);
-          } else if (randomPlant === 1) {
-            newPlant = new cactus(38);
-            new PlantBuilder(newPlant)
-              .setGrowthLevel(4)
-              .setMoistureRequired(2)
-              .setSunRequired(4)
-              .setGrownImage(38);
-          } else {
-            newPlant = new snowTree(123);
-            new PlantBuilder(newPlant)
-              .setGrowthLevel(5)
-              .setMoistureRequired(4)
-              .setSunRequired(2)
-              .setGrownImage(123);
-          }
-
-          const currPos = getPlayerTileAttributes(this.player);
-          const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
-
-          if (plantHolder != null) {
-            this.plants.push(plantHolder);
-            addState(this, this.undoStack);
-            this.redoStack = [];
-          }
+        if (randomPlant === 0) {
+          newPlant = new redShroom(115);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(3)
+            .setMoistureRequired(2)
+            .setSunRequired(2)
+            .setGrownImage(115);
+        } else if (randomPlant === 1) {
+          newPlant = new cactus(38);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(4)
+            .setMoistureRequired(2)
+            .setSunRequired(4)
+            .setGrownImage(38);
+        } else {
+          newPlant = new snowTree(123);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(5)
+            .setMoistureRequired(4)
+            .setSunRequired(2)
+            .setGrownImage(123);
         }
-      );
+
+        const currPos = getPlayerTileAttributes(this.player);
+        const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
+        if (plantHolder != null) {
+          this.plants.push(plantHolder);
+          addState(this, this.undoStack);
+          this.redoStack = [];
+        }
+      });
 
       // Movement buttons
       this.createMobileButton(
@@ -141,7 +157,7 @@ export class GameScene extends Phaser.Scene {
 
       this.createMobileButton(
         this.cameras.main.width / 2,
-        this.cameras.main.height - 200,
+        this.cameras.main.height - 220,
         "↑",
         () => {
           this.player.setPosition(this.player.x, this.player.y - 10);
@@ -153,7 +169,7 @@ export class GameScene extends Phaser.Scene {
         this.cameras.main.height - 100,
         "↓",
         () => {
-          this.player.setPosition(this.player.x, this.player.y + 10);
+          this.player.setPosition(this.player.x, this.player.y + 20);
         }
       );
     }
@@ -258,6 +274,7 @@ export class GameScene extends Phaser.Scene {
       }
     }
   }
+
   createMobileButton(x, y, label, callback) {
     const button = this.add
       .text(x, y, label, {
@@ -273,7 +290,6 @@ export class GameScene extends Phaser.Scene {
     button.on("pointerdown", callback);
     return button;
   }
-  
 
   updateInventoryUI() {
     let inventoryDisplay = `${this.langData.inventory}:\n`;
