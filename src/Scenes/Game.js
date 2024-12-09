@@ -79,6 +79,119 @@ export class GameScene extends Phaser.Scene {
         console.error("Error loading game settings:", error);
       });
 
+    // Mobile Controls (Untouched)
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      const circleButton = this.add
+        .circle(
+          this.cameras.main.width / 2 + 200,
+          this.cameras.main.height / 2 + 100,
+          50,
+          0
+        )
+        .setDepth(1)
+        .setScrollFactor(0)
+        .setInteractive();
+
+      const circleText = this.add
+        .text(
+          this.cameras.main.width / 2 + 180,
+          this.cameras.main.height / 2 + 90,
+          "Plant",
+          { color: "#0f0", backgroundColor: "black" }
+        )
+        .setDepth(1)
+        .setScrollFactor(0);
+
+      circleButton.on("pointerdown", () => {
+        const randomPlant = Math.floor(Math.random() * 3);
+        let newPlant = null;
+
+        if (randomPlant === 0) {
+          newPlant = new redShroom(115);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(3)
+            .setMoistureRequired(2)
+            .setSunRequired(2)
+            .setGrownImage(115);
+        } else if (randomPlant === 1) {
+          newPlant = new cactus(38);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(4)
+            .setMoistureRequired(2)
+            .setSunRequired(4)
+            .setGrownImage(38);
+        } else {
+          newPlant = new snowTree(123);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(5)
+            .setMoistureRequired(4)
+            .setSunRequired(2)
+            .setGrownImage(123);
+        }
+
+        const currPos = getPlayerTileAttributes(this.player);
+        const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
+        if (plantHolder != null) {
+          this.plants.push(plantHolder);
+          addState(this, this.undoStack);
+          this.redoStack = [];
+        }
+      });
+
+      const leftButton = this.add
+        .text(this.cameras.main.width / 2 - 80, this.cameras.main.height - 100, "<-", {
+          color: "#0f0",
+          backgroundColor: "black",
+          fontSize: 50,
+        })
+        .setInteractive()
+        .setDepth(1)
+        .setScrollFactor(0)
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x - 10, this.player.y);
+        });
+
+      const rightButton = this.add
+        .text(this.cameras.main.width / 2 + 60, this.cameras.main.height - 100, "->", {
+          color: "#0f0",
+          backgroundColor: "black",
+          fontSize: 50,
+        })
+        .setInteractive()
+        .setDepth(1)
+        .setScrollFactor(0)
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x + 10, this.player.y);
+        });
+
+      const upButton = this.add
+        .text(this.cameras.main.width / 2, this.cameras.main.height - 200, "↑", {
+          color: "#0f0",
+          backgroundColor: "black",
+          fontSize: 70,
+        })
+        .setInteractive()
+        .setDepth(1)
+        .setScrollFactor(0)
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x, this.player.y - 10);
+        });
+
+      const downButton = this.add
+        .text(this.cameras.main.width / 2, this.cameras.main.height - 100, "↓", {
+          color: "#0f0",
+          backgroundColor: "black",
+          fontSize: 70,
+        })
+        .setInteractive()
+        .setDepth(1)
+        .setScrollFactor(0)
+        .on("pointerdown", () => {
+          this.player.setPosition(this.player.x, this.player.y + 10);
+        });
+    }
+
     // Game Buttons
     this.createButton(10, 10, this.langData.timeMessage, () => {
       this.advanceTurn();
@@ -145,16 +258,12 @@ export class GameScene extends Phaser.Scene {
   advanceTurn() {
     generateTileAttributes(level);
     for (const plant of this.plants) {
-      const plantPos = getPlayerTileAttributes(plant.plantObject) || [
-        null,
-        null,
-      ];
+      const plantPos = getPlayerTileAttributes(plant.plantObject) || [null, null];
       if (plantPos[0] !== null && plantPos[1] !== null) {
         const tile = level[plantPos[0]][plantPos[1]];
         plant.increaseGrowth(1, tile, this, this.plants);
       }
     }
-    console.log("The button is working.");
   }
 
   winConditionCheck() {
