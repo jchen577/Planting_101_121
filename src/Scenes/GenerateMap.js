@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import * as noise from "perlin.js"; // Assuming you're using the perlin.js library
-import { loadGameSettings } from "./YAMLInterpreter.js";
+import GameSettings from "./GameSettings.json" assert { type: "json" };
 
 // Define the level array
 let seed;
@@ -16,7 +16,7 @@ export function generateMap(scene) {
   let colSize = 50;
 
   // Load configuration from YAML
-  const gameConfig = loadGameSettings("./GameSettings.yaml");
+  const gameConfig = GameSettings;
   if (gameConfig) {
     rowSize = gameConfig.tutorial.grid_size[0];
     colSize = gameConfig.tutorial.grid_size[1];
