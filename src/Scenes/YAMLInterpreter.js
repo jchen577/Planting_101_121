@@ -1,10 +1,9 @@
 import YAML from "npm:js-yaml";
 export async function loadGameSettings(filePath) {
-  try {
-    const yamlContent = await Deno.readTextFile(filePath); // Use Deno's built-in function
-    return YAML.load(yamlContent); // Parse YAML into JavaScript object
-  } catch (error) {
-    console.error(`Failed to load YAML file '${filePath}':`, error);
-    throw error;
+  const response = await fetch(filePath);
+  if (!response.ok) {
+    throw new Error(`Could not find YAML file! status: ${response.status}`);
   }
+  const yamlText = await response.text(); // Get the response text
+  return YAML.load(yamlText); // Parse the YAML content
 }
