@@ -75,142 +75,87 @@ export class GameScene extends Phaser.Scene {
         console.error("Error loading game settings:", error);
       });
 
-    //Mobile movement
+    // Mobile movement
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      const circleButton = this.add
-        .circle(
-          this.cameras.main.width / 2 + 200,
-          this.cameras.main.height / 2 + 100,
-          50,
-          0,
-        )
-        .setDepth(1)
-        .setScrollFactor(0)
-        .setInteractive();
-      const circleText = this.add
-        .text(
-          this.cameras.main.width / 2 + 180,
-          this.cameras.main.height / 2 + 90,
-          "Plant",
-          {
-            color: "#0f0",
-            backgroundColor: "black",
-          },
-        )
-        .setDepth(1)
-        .setScrollFactor(0);
-      circleButton.on("pointerdown", () => {
-        const randomPlant = Math.floor(Math.random() * 3);
-        let newPlant = null;
+      // Plant button
+      this.createMobileButton(
+        this.cameras.main.width / 2 + 200,
+        this.cameras.main.height / 2 + 100,
+        "Plant",
+        () => {
+          const randomPlant = Math.floor(Math.random() * 3);
+          let newPlant = null;
 
-        if (randomPlant === 0) {
-          newPlant = new redShroom(115);
-          new PlantBuilder(newPlant)
-            .setGrowthLevel(3)
-            .setMoistureRequired(2)
-            .setSunRequired(2)
-            .setGrownImage(115);
-        } else if (randomPlant === 1) {
-          newPlant = new cactus(38);
-          new PlantBuilder(newPlant)
-            .setGrowthLevel(4)
-            .setMoistureRequired(2)
-            .setSunRequired(4)
-            .setGrownImage(38);
-        } else {
-          newPlant = new snowTree(123);
-          new PlantBuilder(newPlant)
-            .setGrowthLevel(5)
-            .setMoistureRequired(4)
-            .setSunRequired(2)
-            .setGrownImage(123);
+          if (randomPlant === 0) {
+            newPlant = new redShroom(115);
+            new PlantBuilder(newPlant)
+              .setGrowthLevel(3)
+              .setMoistureRequired(2)
+              .setSunRequired(2)
+              .setGrownImage(115);
+          } else if (randomPlant === 1) {
+            newPlant = new cactus(38);
+            new PlantBuilder(newPlant)
+              .setGrowthLevel(4)
+              .setMoistureRequired(2)
+              .setSunRequired(4)
+              .setGrownImage(38);
+          } else {
+            newPlant = new snowTree(123);
+            new PlantBuilder(newPlant)
+              .setGrowthLevel(5)
+              .setMoistureRequired(4)
+              .setSunRequired(2)
+              .setGrownImage(123);
+          }
+
+          const currPos = getPlayerTileAttributes(this.player);
+          const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
+          if (plantHolder != null) {
+            this.plants.push(plantHolder);
+            addState(this, this.undoStack);
+            this.redoStack = [];
+          }
         }
+      );
 
-        const currPos = getPlayerTileAttributes(this.player);
-        const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
-
-        if (plantHolder != null) {
-          this.plants.push(plantHolder);
-          addState(this, this.undoStack);
-          this.redoStack = [];
-        }
-      });
-      const leftButton = this.add
-        .text(
-          this.cameras.main.width / 2 - 80,
-          this.cameras.main.height - 100,
-          "<-",
-          {
-            color: "#0f0",
-            backgroundColor: "black",
-            fontSize: 50,
-          },
-        )
-        .setInteractive()
-        .setDepth(1);
-
-      leftButton
-        .on("pointerdown", () => {
+      // Movement buttons
+      this.createMobileButton(
+        this.cameras.main.width / 2 - 80,
+        this.cameras.main.height - 100,
+        "<-",
+        () => {
           this.player.setPosition(this.player.x - 10, this.player.y);
-        })
-        .setScrollFactor(0);
+        }
+      );
 
-      const rightButton = this.add
-        .text(
-          this.cameras.main.width / 2 + 60,
-          this.cameras.main.height - 100,
-          "->",
-          {
-            color: "#0f0",
-            backgroundColor: "black",
-            fontSize: 50,
-          },
-        )
-        .setInteractive()
-        .setDepth(1);
-        
-      rightButton
-        .on("pointerdown", () => {
+      this.createMobileButton(
+        this.cameras.main.width / 2 + 60,
+        this.cameras.main.height - 100,
+        "->",
+        () => {
           this.player.setPosition(this.player.x + 10, this.player.y);
-        })
-        .setScrollFactor(0);
-      const upButton = this.add
-        .text(
-          this.cameras.main.width / 2,
-          this.cameras.main.height - 200,
-          "↑",
-          {
-            color: "#0f0",
-            backgroundColor: "black",
-            fontSize: 70,
-          },
-        )
-        .setInteractive()
-        .setDepth(1);
-      upButton
-        .on("pointerdown", () => {
-          this.player.setPosition(this.player.x, this.player.y - 10);
-        })
-        .setScrollFactor(0);
+        }
+      );
 
-      const downButton = this.add
-        .text(
-          this.cameras.main.width / 2,
-          this.cameras.main.height - 100,
-          "↓",
-          {
-            color: "#0f0",
-            backgroundColor: "black",
-            fontSize: 70,
-          },
-        )
-        .setInteractive()
-        .setDepth(1);
-      downButton
-        .on("pointerdown", () => {
+      this.createMobileButton(
+        this.cameras.main.width / 2,
+        this.cameras.main.height - 200,
+        "↑",
+        () => {
+          this.player.setPosition(this.player.x, this.player.y - 10);
+        }
+      );
+
+      this.createMobileButton(
+        this.cameras.main.width / 2,
+        this.cameras.main.height - 100,
+        "↓",
+        () => {
           this.player.setPosition(this.player.x, this.player.y + 10);
-        })
-        .setScrollFactor(0);
+        }
+      );
     }
 
     //Buttons
@@ -313,6 +258,22 @@ export class GameScene extends Phaser.Scene {
       }
     }
   }
+  createMobileButton(x, y, label, callback) {
+    const button = this.add
+      .text(x, y, label, {
+        color: "#0f0",
+        backgroundColor: "black",
+        fontSize: "50px",
+        padding: { x: 10, y: 5 },
+      })
+      .setInteractive()
+      .setScrollFactor(0)
+      .setDepth(1);
+  
+    button.on("pointerdown", callback);
+    return button;
+  }
+  
 
   updateInventoryUI() {
     let inventoryDisplay = `${this.langData.inventory}:\n`;
