@@ -1,3 +1,23 @@
+# F3. Devlog Entry - [12/06/2024]  
+## How we satisfied the software requirements
+### F0+F1+F2
+Our implementations for F0, F1, and F2 software requirements have stayed consistent. The game still has the same tile structure, gameplay, and the autosave/manual functionality as before. We also still have our YAML external DSL and internal DSL working for the current iteration of the game. The current game is also fully in Javascript for the platform switch. 
+
+### [F3.a] Internationalization
+Our game has three language options and it display and option for the player to switch the game language in the home screen. Once a language option is selected, the text of the entire game will be translated to that language. We did this through using JSON files for each of the languages. Each file has the game objects containing localized translations for the interface text of the game. The main menu of the game allows the player to select the language they want and the corresponding JSON file will be parsed in for internalization.
+
+### [F3.b] Localization
+Our game is localized to English, Japanese, and Arabic. Japanese for the right to left requirement and Arabic for the logographic script requirement. Each file has the game objects and game keys containing localized translations for the interface text of the game. Our use of JSON files to achieve this allows us to dynamically switch the UI between the three languages implemented. The player can switch between the languages in the main menu of the game. We were able to translate the game through the use of Chatgpt for the Arabic translation and one of our group members has knowledge on Japanese. 
+
+### [F3.c] Mobile Installation
+When game is deployed from Github, the player can install the game onto their smartphone by hitting the share button on their browser. The game can be installed by them hitting the "add to home screen" button which will download the app onto their phone to be playable on their smartphone device. We used the help of Brace to achieve the installable functionality. 
+
+### [F3.d] Mobile Play (Offline)
+We needed to change the grid size and scale by minimizing it so our game can be playable on a smartphone device. We also implemented move arrows for the player so they can navigate their way around the game without a keyboard. Our game runs offline without any issues so we didn't need to make any changes to implement that. 
+
+## Reflections 
+We made a lot of reconsiderations for this round of development as we were having issues with the build of deployment environment. Our concern was that using the Deno runtime was causing issues with our deployment environement. The game not being able to properly deploy our assets into GitHub initially caused our game installation implementation to not work. We ended up using Brace to help refactor our code to help fix our build issue which alleviated our plan of  making a new repository and switching to live server. As our game evolved we had to think about how we could most easily implement localization for the player. We decided the easiest way to implement this is just allowing the player switch their language option in settings. We also needed to make the grid scale of our game executable in a mobile format which made us refactor our game design. 
+
 # F2. Devlog Entry - [12/02/2024]  
 ## How we satisfied the software requirements
 ### F0+F1
