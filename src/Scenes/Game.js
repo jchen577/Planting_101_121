@@ -385,8 +385,9 @@ export class GameScene extends Phaser.Scene {
 
     if (this.winConditionCheck()) {
       this.add
-        .text(320, 320, this.langData.win, { color: "#ff0000" })
-        .setScrollFactor(0);
+        .text(200, 250, this.langData.win, { color: "#ff0000", fontSize: "28px" })
+        .setScrollFactor(0)
+        .setDepth(1);
     }
 
     if (this.left.isDown) {
