@@ -6,40 +6,80 @@ export class MainMenu extends Phaser.Scene {
     this.selectedLang = "lang_en";
   }
 
+  preload() {
+    // Load background and additional image assets
+    this.load.image("background", "public/assets/galaxyBG.jpeg");
+    this.load.image("earth", "public/assets/earthPixel.png"); // Replace with the path to your image
+  }
+
   create() {
+    // Add the background image
+    this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, "background")
+      .setOrigin(0.5)
+      .setDisplaySize(this.cameras.main.width, this.cameras.main.height * 2); // Scale to fit the screen
+
+    const earth = this.add.image(this.cameras.main.centerX - 200, 600, "earth") 
+      .setOrigin(0.5);
+
+    earth.setScale(); 
     this.langData = this.cache.json.get(this.selectedLang);
 
+    // Add the title
     this.title = this.add
-      .text(this.cameras.main.centerX, 100, this.langData.title, {
-        font: "48px Arial",
+      .text(this.cameras.main.centerX, 200, this.langData.title, {
+        font: "48px Jaro",
         fill: "#ffffff",
       })
       .setOrigin(0.5);
 
+    // Add tilt animation to the title
+    this.tweens.add({
+      targets: this.title,
+      angle: { from: -1, to: 1 },
+      duration: 1000,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+
+    // Add play button
     this.playButton = this.add
-      .text(this.cameras.main.centerX, 200, this.langData.play, {
-        font: "32px Arial",
+      .text(this.cameras.main.centerX, 310, this.langData.play, {
+        font: "32px Jaro",
         fill: "#ffffff",
-        backgroundColor: "#0000ff",
-        padding: 10,
+        backgroundColor: "#00C000",
+        padding: { x: 55, y: 10 },
       })
       .setOrigin(0.5)
       .setInteractive()
       .on("pointerdown", () => {
         console.log(`Starting game in ${this.selectedLang}`);
         this.scene.start("GameScene", { selectedLang: this.selectedLang });
+      })
+      .on("pointerover", () => {
+        this.playButton.setStyle({ fill: "#039164", backgroundColor: "#cffcd0" });
+      })
+      .on("pointerout", () => {
+        this.playButton.setStyle({ fill: "#ffffff", backgroundColor: "#00C000" });
       });
 
+    // Add settings button
     this.settingsButton = this.add
-      .text(this.cameras.main.centerX, 300, this.langData.settings, {
-        font: "32px Arial",
+      .text(this.cameras.main.centerX, 390, this.langData.settings, {
+        font: "32px Jaro",
         fill: "#ffffff",
-        backgroundColor: "#ff0000",
-        padding: 10,
+        backgroundColor: "#ffd21f",
+        padding: { x: 12, y: 10 },
       })
       .setOrigin(0.5)
       .setInteractive()
-      .on("pointerdown", () => this.openSettingsMenu());
+      .on("pointerdown", () => this.openSettingsMenu())
+      .on("pointerover", () => {
+        this.settingsButton.setStyle({ fill: "#00bbff", backgroundColor: "#fffb91" });
+      })
+      .on("pointerout", () => {
+        this.settingsButton.setStyle({ fill: "#ffffff", backgroundColor: "#ffd21f" });
+      });
   }
 
   openSettingsMenu() {
@@ -93,6 +133,12 @@ export class MainMenu extends Phaser.Scene {
           this.updateText();
 
           console.log(`Language selected: ${this.selectedLang}`);
+        })
+        .on("pointerover", () => {
+          langButton.setStyle({ fill: "#ffffff", backgroundColor: "#666666" });
+        })
+        .on("pointerout", () => {
+          langButton.setStyle({ fill: "#000000", backgroundColor: "#dddddd" });
         });
       settingsMenu.add(langButton);
     });
