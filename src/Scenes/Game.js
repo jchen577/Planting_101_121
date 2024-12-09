@@ -137,43 +137,55 @@ export class GameScene extends Phaser.Scene {
       });
 
       // Movement buttons
-      this.createMobileButton(
-        this.cameras.main.width / 2 - 80,
-        this.cameras.main.height - 100,
-        "<-",
-        () => {
-          this.player.setPosition(this.player.x - 10, this.player.y);
-        }
-      );
-
-      this.createMobileButton(
-        this.cameras.main.width / 2 + 60,
-        this.cameras.main.height - 100,
-        "->",
-        () => {
-          this.player.setPosition(this.player.x + 10, this.player.y);
-        }
-      );
-
-      this.createMobileButton(
-        this.cameras.main.width / 2,
-        this.cameras.main.height - 200,
-        "↑",
-        () => {
-          this.player.setPosition(this.player.x, this.player.y -10);
-        }
-      );
-
-      this.createMobileButton(
-        this.cameras.main.width / 2,
-        this.cameras.main.height - 100,
-        "↓",
-        () => {
-          this.player.setPosition(this.player.x, this.player.y + 10);
-        }
-      );
-    }
-
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height - 150; // Adjust vertical anchor point
+        const buttonOffset = 80; // Distance between buttons
+      
+        // Up Button
+        this.createMobileButton(
+          centerX,
+          centerY - buttonOffset, // Place above the center
+          "↑",
+          () => {
+            this.player.setPosition(this.player.x, this.player.y - 10);
+          },
+          "40px"
+        );
+      
+        // Down Button
+        this.createMobileButton(
+          centerX,
+          centerY + buttonOffset, // Place below the center
+          "↓",
+          () => {
+            this.player.setPosition(this.player.x, this.player.y + 10);
+          },
+          "40px"
+        );
+      
+        // Left Button
+        this.createMobileButton(
+          centerX - buttonOffset, // Place to the left of the center
+          centerY,
+          "←",
+          () => {
+            this.player.setPosition(this.player.x - 10, this.player.y);
+          },
+          "40px"
+        );
+      
+        // Right Button
+        this.createMobileButton(
+          centerX + buttonOffset, // Place to the right of the center
+          centerY,
+          "→",
+          () => {
+            this.player.setPosition(this.player.x + 10, this.player.y);
+          },
+          "40px"
+        );
+      }
+      
     //Buttons
     const turnButton = this.add.text(10, 10, this.langData.timeMessage, {
       color: "#0f0",
