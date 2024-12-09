@@ -63,20 +63,78 @@ export class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
 
     loadGameSettings("/seedy_place_in_outer_space/assets/GameSettings.yaml")
-      .then(gameConfig => {
+      .then((gameConfig) => {
         // Access attributes after the Promise has resolved
         mapWidth = gameConfig.tutorial.grid_size[0] * 64;
         mapHeight = gameConfig.tutorial.grid_size[1] * 64;
         this.physics.world.setBounds(0, 0, mapWidth, mapHeight);
-        this.player.setPosition(mapWidth/2, mapHeight/2);
+        this.player.setPosition(mapWidth / 2, mapHeight / 2);
         this.player.setDepth(1);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error loading game settings:", error);
-    });
+      });
 
     //Mobile movement
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      const circleButton = this.add
+        .circle(
+          this.cameras.main.width / 2 + 200,
+          this.cameras.main.height / 2 + 100,
+          50,
+          0,
+        )
+        .setDepth(1)
+        .setScrollFactor(0)
+        .setInteractive();
+      const circleText = this.add
+        .text(
+          this.cameras.main.width / 2 + 180,
+          this.cameras.main.height / 2 + 90,
+          "Plant",
+          {
+            color: "#0f0",
+            backgroundColor: "black",
+          },
+        )
+        .setDepth(1)
+        .setScrollFactor(0);
+      circleButton.on("pointerdown", () => {
+        const randomPlant = Math.floor(Math.random() * 3);
+        let newPlant = null;
+
+        if (randomPlant === 0) {
+          newPlant = new redShroom(115);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(3)
+            .setMoistureRequired(2)
+            .setSunRequired(2)
+            .setGrownImage(115);
+        } else if (randomPlant === 1) {
+          newPlant = new cactus(38);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(4)
+            .setMoistureRequired(2)
+            .setSunRequired(4)
+            .setGrownImage(38);
+        } else {
+          newPlant = new snowTree(123);
+          new PlantBuilder(newPlant)
+            .setGrowthLevel(5)
+            .setMoistureRequired(4)
+            .setSunRequired(2)
+            .setGrownImage(123);
+        }
+
+        const currPos = getPlayerTileAttributes(this.player);
+        const plantHolder = newPlant.plant(this, currPos[1], currPos[0]);
+
+        if (plantHolder != null) {
+          this.plants.push(plantHolder);
+          addState(this, this.undoStack);
+          this.redoStack = [];
+        }
+      });
       const leftButton = this.add
         .text(
           this.cameras.main.width / 2 - 80,
@@ -88,7 +146,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 50,
           },
         )
-        .setInteractive().setDepth(1);
+        .setInteractive()
+        .setDepth(1);
       leftButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x - 10, this.player.y);
@@ -106,7 +165,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 50,
           },
         )
-        .setInteractive().setDepth(1);
+        .setInteractive()
+        .setDepth(1);
       rightButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x + 10, this.player.y);
@@ -123,7 +183,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 70,
           },
         )
-        .setInteractive().setDepth(1);
+        .setInteractive()
+        .setDepth(1);
       upButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x, this.player.y - 10);
@@ -141,7 +202,8 @@ export class GameScene extends Phaser.Scene {
             fontSize: 70,
           },
         )
-        .setInteractive().setDepth(1);
+        .setInteractive()
+        .setDepth(1);
       downButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x, this.player.y + 10);
