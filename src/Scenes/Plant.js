@@ -1,48 +1,40 @@
 import { GameObjects, Scene } from "phaser";
-import { changePlantable, getPlantable } from "./GenerateMap.ts";
-import { Tile } from "./TileGeneration.ts";
-import { GameScene } from "./GameScene.ts"; // Ensure this import is added
+import { changePlantable, getPlantable } from "./GenerateMap.js";
 
-export class Plant extends Phaser.Scene {
-  growthLevel: number = 0;
-  fullGrownImage = 0;
-  sprout = 59;
-  plantObject: GameObjects.Sprite;
-  position: number[] = [];
-  maxGrowth = 3;
-  moistureRequired = 2;
-  sunRequired = 3;
-
+export class Plant extends Scene {
   constructor() {
     super();
+    this.growthLevel = 0;
+    this.fullGrownImage = 0;
+    this.sprout = 59;
+    this.plantObject = null;
+    this.position = [];
+    this.maxGrowth = 3;
+    this.moistureRequired = 2;
+    this.sunRequired = 3;
   }
 
   getGrowth() {
     return this.growthLevel;
   }
 
-  setGrownImage(imgNum: number) {
+  setGrownImage(imgNum) {
     this.fullGrownImage = imgNum;
   }
 
-  setGrowthNumber(growthLvl: number) {
+  setGrowthNumber(growthLvl) {
     this.maxGrowth = growthLvl;
   }
 
-  setReqMoisture(moisture: number) {
+  setReqMoisture(moisture) {
     this.moistureRequired = moisture;
   }
 
-  setReqSun(sun: number) {
+  setReqSun(sun) {
     this.sunRequired = sun;
   }
 
-  increaseGrowth(
-    growth: number,
-    tile: Tile,
-    scene: Phaser.Scene,
-    plants: Plant[],
-  ) {
+  increaseGrowth(growth, tile, scene, plants) {
     if (
       tile.sunLevel >= this.sunRequired &&
       tile.waterLevel >= this.moistureRequired
@@ -50,8 +42,7 @@ export class Plant extends Phaser.Scene {
       this.growthLevel++;
     }
 
-    // Check if the plant is fully grown
-    if (this.growthLevel == this.maxGrowth) {
+    if (this.growthLevel === this.maxGrowth) {
       this.growPlant();
 
       // Add interactivity for harvesting
@@ -63,34 +54,28 @@ export class Plant extends Phaser.Scene {
     }
   }
 
-  harvestPlant(tile: Tile, scene: Phaser.Scene, plants: Plant[]) {
-    // Remove the plant object
-    plants.splice(plants.indexOf(this), 1, this);
+  harvestPlant(tile, scene, plants) {
+    plants.splice(plants.indexOf(this), 1);
 
     this.plantObject.destroy();
 
-    // Ensure the scene is cast to GameScene
-
-    // Update the inventory
-    const plantType = this.constructor.name; // Get the class name
+    const plantType = this.constructor.name;
     if (!scene.inventory[plantType]) {
       scene.inventory[plantType] = 0;
     }
     scene.inventory[plantType]++;
 
-    // Reset the tile to be plantable again
     changePlantable(
       (this.plantObject.x - 32) / 64,
       (this.plantObject.y - 32) / 64,
       true,
     );
 
-    // Update the inventory UI in the scene
     scene.updateInventoryUI();
   }
 
-  deletePlant(plants: Plant[]) {
-    plants.splice(plants.indexOf(this), 1, this);
+  deletePlant(plants) {
+    plants.splice(plants.indexOf(this), 1);
     this.plantObject.destroy();
     changePlantable(
       (this.plantObject.x - 32) / 64,
@@ -99,7 +84,7 @@ export class Plant extends Phaser.Scene {
     );
   }
 
-  plant(scene: Scene, posX: number, posY: number) {
+  plant(scene, posX, posY) {
     if (getPlantable(posX, posY)) {
       this.plantObject = scene.physics.add.sprite(
         posX * 64 + 32,
@@ -114,34 +99,33 @@ export class Plant extends Phaser.Scene {
       return null;
     }
   }
+
   growPlant() {
     this.plantObject.setTexture("all_tiles", this.fullGrownImage);
   }
 }
 
 export class PlantBuilder {
-  private plant: Plant;
-
-  constructor(plant: Plant) {
+  constructor(plant) {
     this.plant = plant;
   }
 
-  setGrowthLevel(level: number) {
+  setGrowthLevel(level) {
     this.plant.setGrowthNumber(level);
     return this;
   }
 
-  setMoistureRequired(moisture: number) {
+  setMoistureRequired(moisture) {
     this.plant.setReqMoisture(moisture);
     return this;
   }
 
-  setSunRequired(sun: number) {
+  setSunRequired(sun) {
     this.plant.setReqSun(sun);
     return this;
   }
 
-  setGrownImage(image: number) {
+  setGrownImage(image) {
     this.plant.setGrownImage(image);
     return this;
   }
@@ -152,21 +136,21 @@ export class PlantBuilder {
 }
 
 export class redShroom extends Plant {
-  constructor(imageNum: number) {
+  constructor(imageNum) {
     super();
     this.fullGrownImage = imageNum;
   }
 }
 
 export class cactus extends Plant {
-  constructor(imageNum: number) {
+  constructor(imageNum) {
     super();
     this.fullGrownImage = imageNum;
   }
 }
 
 export class snowTree extends Plant {
-  constructor(imageNum: number) {
+  constructor(imageNum) {
     super();
     this.fullGrownImage = imageNum;
   }

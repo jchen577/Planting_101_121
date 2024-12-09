@@ -1,0 +1,18 @@
+{
+  "sun": "Sun",
+  "water": "Water",
+  "timeMessage": "Advance Time",
+  "inventory": "Inventory",
+  "undo": "Undo",
+  "redo": "Redo",
+  "load": "Load Game",
+  "save": "Save Game",
+  "redShroom": "Red Shroom",
+  "cactus": "Cactus",
+  "snowTree": "Snow Tree",
+  "win": "Space Conquered!",
+  "title": "Seedy Place in Outer Space",
+  "play": "Play",
+  "settings": "Settings 🌐",
+  "selectLanguage": "Select Language"
+}

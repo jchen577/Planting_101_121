@@ -1,18 +1,16 @@
-import { saveGameState } from "./SaveGame";
+import { saveGameState } from "./SaveGame.js";
 
 export class AutoSaveManager {
-  private scene: Phaser.Scene;
-  private intervalId: number | null = null;
-
-  constructor(scene: Phaser.Scene) {
+  constructor(scene) {
     this.scene = scene;
+    this.intervalId = null;
   }
 
   /**
-   * Starts the auto-save system with a specified interval 
-   * @param interval The interval in milliseconds for auto-saving every 2 mins
+   * Starts the auto-save system with a specified interval
+   * @param {number} interval The interval in milliseconds for auto-saving every 2 mins
    */
-  startAutoSave(interval: number = 300000): void {
+  startAutoSave(interval = 300000) {
     if (this.intervalId !== null) {
       console.warn("Auto-save system is already running.");
       return;
@@ -24,12 +22,14 @@ export class AutoSaveManager {
     }, interval);
 
     console.log(
-      "Auto-save system started. Saving every " + interval / 60000 + " minutes."
+      "Auto-save system started. Saving every " +
+        interval / 60000 +
+        " minutes.",
     );
   }
 
-  // Stop autosave system 
-  stopAutoSave(): void {
+  // Stop the auto-save system
+  stopAutoSave() {
     if (this.intervalId !== null) {
       clearInterval(this.intervalId);
       this.intervalId = null;
@@ -40,7 +40,7 @@ export class AutoSaveManager {
   }
 
   // Display an auto-save notification on the screen.
-  private showSaveIndicator(): void {
+  showSaveIndicator() {
     const saveIndicator = document.getElementById("save-indicator");
     if (saveIndicator) {
       saveIndicator.style.display = "block";

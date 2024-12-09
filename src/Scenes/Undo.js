@@ -1,22 +1,12 @@
-import { getLevel } from "./GenerateMap";
-import { Plant } from "./Plant";
-import { GameScene } from "./GameScene";
-import { updateMapVisuals } from "./GenerateMap";
-import { redShroom, cactus, snowTree, Plant } from "./Plant"; // Import Plant
+import { getLevel, updateMapVisuals } from "./GenerateMap.js";
+import { redShroom, cactus, snowTree } from "./Plant.js";
 
 /**
- * Saves the current game state into a JSON file.
- * @param scene The current instance of the game scene.
+ * Adds the current game state to the undo stack.
+ * @param {Object} scene - The current instance of the game scene.
+ * @param {Array} undoStack - The undo stack to which the state will be added.
  */
-
-export interface State {
-  player: { x: any; y: any };
-  inventory: any;
-  plants: any;
-  level: any;
-}
-
-export function addState(scene: GameScene, undoStack: State[]): void {
+export function addState(scene, undoStack) {
   const state = {
     player: {
       x: scene.player.x,
@@ -41,25 +31,33 @@ export function addState(scene: GameScene, undoStack: State[]): void {
   undoStack.push(state);
 }
 
-export function loadState(scene: GameScene, state: State) {
+/**
+ * Loads a saved game state.
+ * @param {Object} scene - The current instance of the game scene.
+ * @param {Object} state - The state to load.
+ */
+export function loadState(scene, state) {
   // Restore player position
   scene.player.setPosition(state.player.x, state.player.y);
 
   // Restore inventory
   scene.inventory = state.inventory;
+
   // Reset and restore plants
-  scene.plants.forEach((plant: Plant) => {
+  scene.plants.forEach((plant) => {
     plant.deletePlant(scene.plants);
   });
-  state.plants.forEach((plantData: any) => {
+
+  state.plants.forEach((plantData) => {
     const { plantType, tileX, tileY, growthLevel } = plantData;
-    let plant: Plant | null = null;
-    if (plantType == "redShroom") {
-      plant = new redShroom(115); // Provide correct sprite index
-    } else if (plantType == "cactus") {
-      plant = new cactus(38); // Provide correct sprite index
-    } else if (plantType == "snowTree") {
-      plant = new snowTree(123); // Provide correct sprite index
+    let plant = null;
+
+    if (plantType === "redShroom") {
+      plant = new redShroom(115);
+    } else if (plantType === "cactus") {
+      plant = new cactus(38);
+    } else if (plantType === "snowTree") {
+      plant = new snowTree(123);
     }
 
     if (plant) {
@@ -72,7 +70,7 @@ export function loadState(scene: GameScene, state: State) {
           planted.growPlant();
           planted.plantObject.setInteractive();
           planted.plantObject.once("pointerdown", () => {
-            planted.harvestPlant(level[tileX][tileY], scene, scene.plants);
+            planted.harvestPlant(getLevel()[tileX][tileY], scene, scene.plants);
           });
         }
         scene.plants.push(planted);
@@ -82,8 +80,8 @@ export function loadState(scene: GameScene, state: State) {
 
   // Restore level data
   const level = getLevel();
-  state.level.forEach((row: any[], y: number) => {
-    row.forEach((tile: any, x: number) => {
+  state.level.forEach((row, y) => {
+    row.forEach((tile, x) => {
       level[y][x] = {
         tileNumber: tile.tileNumber,
         canPlant: tile.canPlant,

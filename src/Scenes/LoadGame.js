@@ -1,13 +1,12 @@
-import { getLevel } from "./GenerateMap";
-import { GameScene } from "./GameScene";
-import { updateMapVisuals } from "./GenerateMap";
-import { redShroom, cactus, snowTree, Plant } from "./Plant"; // Import Plant
+import { getLevel } from "./GenerateMap.js";
+import { updateMapVisuals } from "./GenerateMap.js";
+import { redShroom, cactus, snowTree } from "./Plant.js"; // Import Plant classes
 
 /**
  * Loads the game state from a JSON file.
- * @param scene The current instance of the game scene.
+ * @param {Object} scene The current instance of the game scene.
  */
-export async function loadGameState(scene: GameScene): Promise<void> {
+export async function loadGameState(scene) {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".json";
@@ -26,16 +25,16 @@ export async function loadGameState(scene: GameScene): Promise<void> {
     scene.inventory = state.inventory;
 
     // Reset and restore plants
-    scene.plants.forEach((plant: Plant) => plant.deletePlant(scene.plants));
-    state.plants.forEach((plantData: any) => {
+    scene.plants.forEach((plant) => plant.deletePlant(scene.plants));
+    state.plants.forEach((plantData) => {
       const { plantType, tileX, tileY, growthLevel } = plantData;
 
-      let plant: Plant | null = null;
-      if (plantType == "redShroom") {
+      let plant = null;
+      if (plantType === "redShroom") {
         plant = new redShroom(115); // Provide correct sprite index
-      } else if (plantType == "cactus") {
+      } else if (plantType === "cactus") {
         plant = new cactus(38); // Provide correct sprite index
-      } else if (plantType == "snowTree") {
+      } else if (plantType === "snowTree") {
         plant = new snowTree(123); // Provide correct sprite index
       }
 
@@ -49,7 +48,11 @@ export async function loadGameState(scene: GameScene): Promise<void> {
             planted.growPlant();
             planted.plantObject.setInteractive();
             planted.plantObject.once("pointerdown", () => {
-              planted.harvestPlant(level[tileX][tileY], scene, scene.plants);
+              planted.harvestPlant(
+                getLevel()[tileX][tileY],
+                scene,
+                scene.plants,
+              );
             });
           }
 
@@ -57,10 +60,11 @@ export async function loadGameState(scene: GameScene): Promise<void> {
         }
       }
     });
+
     // Restore level data
     const level = getLevel();
-    state.level.forEach((row: any[], y: number) => {
-      row.forEach((tile: any, x: number) => {
+    state.level.forEach((row, y) => {
+      row.forEach((tile, x) => {
         level[y][x] = {
           tileNumber: tile.tileNumber,
           canPlant: tile.canPlant,
@@ -70,14 +74,12 @@ export async function loadGameState(scene: GameScene): Promise<void> {
       });
     });
 
+    // Restore undo and redo stacks
     scene.undoStack = state.undoStack;
     scene.redoStack = state.redoStack;
 
     // Update map visuals
     updateMapVisuals();
-
-    // Update plant visuals
-    // Plant.updatePlantVisuals(scene, scene.plants);
 
     console.log("Game state loaded!");
   };

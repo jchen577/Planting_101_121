@@ -21,7 +21,9 @@ export class LoadScene extends Phaser.Scene {
 
   // Save game state as a downloadable JSON file
   saveAsJSON() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.gameState));
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(this.gameState));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute("download", "gameState.json");
@@ -52,15 +54,35 @@ export class LoadScene extends Phaser.Scene {
 
   preload() {
     // Set asset path and preload assets
-    this.load.path = "./project/assets/";
+    //this.load.path = "./seedy_place_in_outer_space/assets/";
+
+    this.load.json(
+      "lang_en",
+      "/seedy_place_in_outer_space/assets/lang_eng.json",
+    );
+    this.load.json(
+      "lang_jp",
+      "/seedy_place_in_outer_space/assets/lang_jp.json",
+    );
+    this.load.json(
+      "lang_ar",
+      "/seedy_place_in_outer_space/assets/lang_ar.json",
+    );
 
     // Load assets
-    this.load.image("smb_tiles", "tilemap.png");
-    this.load.spritesheet("all_tiles", "tilemap.png", {
-      frameWidth: 64,
-      frameHeight: 64,
-    });
-    this.load.image("player", "player.png");
+    this.load.image(
+      "smb_tiles",
+      "/seedy_place_in_outer_space/assets/tilemap.png",
+    );
+    this.load.spritesheet(
+      "all_tiles",
+      "/seedy_place_in_outer_space/assets/tilemap.png",
+      {
+        frameWidth: 64,
+        frameHeight: 64,
+      },
+    );
+    this.load.image("player", "/seedy_place_in_outer_space/assets/player.png");
 
     // Create a loading bar
     const loadingBar = this.add.graphics();
@@ -118,6 +140,6 @@ export class LoadScene extends Phaser.Scene {
       });
 
     // Start the next scene
-    this.scene.start("GameScene");
+    this.scene.start("MainMenu");
   }
 }
