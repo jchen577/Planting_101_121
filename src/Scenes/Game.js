@@ -157,10 +157,10 @@ export class GameScene extends Phaser.Scene {
 
       this.createMobileButton(
         this.cameras.main.width / 2,
-        this.cameras.main.height - 220,
+        this.cameras.main.height - 200,
         "↑",
         () => {
-          this.player.setPosition(this.player.x, this.player.y - 10);
+          this.player.setPosition(this.player.x, this.player.y -10);
         }
       );
 
@@ -169,7 +169,7 @@ export class GameScene extends Phaser.Scene {
         this.cameras.main.height - 100,
         "↓",
         () => {
-          this.player.setPosition(this.player.x, this.player.y + 20);
+          this.player.setPosition(this.player.x, this.player.y + 10);
         }
       );
     }
