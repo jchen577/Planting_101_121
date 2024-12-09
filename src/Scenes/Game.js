@@ -88,7 +88,7 @@ export class GameScene extends Phaser.Scene {
             fontSize: 50,
           },
         )
-        .setInteractive();
+        .setInteractive().setDepth(1);
       leftButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x - 10, this.player.y);
@@ -106,7 +106,7 @@ export class GameScene extends Phaser.Scene {
             fontSize: 50,
           },
         )
-        .setInteractive();
+        .setInteractive().setDepth(1);
       rightButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x + 10, this.player.y);
@@ -123,7 +123,7 @@ export class GameScene extends Phaser.Scene {
             fontSize: 70,
           },
         )
-        .setInteractive();
+        .setInteractive().setDepth(1);
       upButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x, this.player.y - 10);
@@ -141,7 +141,7 @@ export class GameScene extends Phaser.Scene {
             fontSize: 70,
           },
         )
-        .setInteractive();
+        .setInteractive().setDepth(1);
       downButton
         .on("pointerdown", () => {
           this.player.setPosition(this.player.x, this.player.y + 10);
