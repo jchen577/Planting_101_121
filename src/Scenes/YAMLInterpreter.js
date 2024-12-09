@@ -1,4 +1,4 @@
-import YAML from 'https://cdn.jsdelivr.net/npm/js-yaml@4/dist/jsyaml.min.js';
+import YAML from 'https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js';
 export async function loadGameSettings(filePath) {
   const response = await fetch(filePath);
   if (!response.ok) {
