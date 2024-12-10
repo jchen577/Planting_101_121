@@ -14,7 +14,7 @@ export function addState(scene, undoStack) {
     },
     inventory: scene.inventory,
     plants: scene.plants.map((plant) => ({
-      plantType: plant.constructor.name,
+      plantType: plant.plantType,
       growthLevel: plant.growthLevel,
       tileX: plant.position[0],
       tileY: plant.position[1],
@@ -53,11 +53,11 @@ export function loadState(scene, state) {
     let plant = null;
 
     if (plantType === "redShroom") {
-      plant = new redShroom(115);
+      plant = new redShroom(115, "redShroom");
     } else if (plantType === "cactus") {
-      plant = new cactus(38);
+      plant = new cactus(38, "cactus");
     } else if (plantType === "snowTree") {
-      plant = new snowTree(123);
+      plant = new snowTree(123, "snowTree");
     }
 
     if (plant) {

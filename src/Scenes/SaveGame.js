@@ -12,7 +12,7 @@ export function saveGameState(scene) {
     },
     inventory: scene.inventory,
     plants: scene.plants.map((plant) => ({
-      plantType: plant.constructor.name,
+      plantType: plant.plantType,
       growthLevel: plant.growthLevel,
       tileX: plant.position[0],
       tileY: plant.position[1],

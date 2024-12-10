@@ -31,11 +31,11 @@ export async function loadGameState(scene) {
 
       let plant = null;
       if (plantType === "redShroom") {
-        plant = new redShroom(115); // Provide correct sprite index
+        plant = new redShroom(115, "redShroom"); // Provide correct sprite index
       } else if (plantType === "cactus") {
-        plant = new cactus(38); // Provide correct sprite index
+        plant = new cactus(38, "cactus"); // Provide correct sprite index
       } else if (plantType === "snowTree") {
-        plant = new snowTree(123); // Provide correct sprite index
+        plant = new snowTree(123, "snowTree"); // Provide correct sprite index
       }
 
       if (plant) {

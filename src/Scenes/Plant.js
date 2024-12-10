@@ -12,6 +12,7 @@ export class Plant extends Scene {
     this.maxGrowth = 3;
     this.moistureRequired = 2;
     this.sunRequired = 3;
+    this.plantType = "";
   }
 
   getGrowth() {
@@ -55,23 +56,25 @@ export class Plant extends Scene {
   }
 
   harvestPlant(tile, scene, plants) {
-    plants.splice(plants.indexOf(this), 1);
+    if (plants.indexOf(this) != -1) {
+      plants.splice(plants.indexOf(this), 1);
 
-    this.plantObject.destroy();
+      this.plantObject.destroy();
 
-    const plantType = this.constructor.name;
-    if (!scene.inventory[plantType]) {
-      scene.inventory[plantType] = 0;
+      //console.log(this.plantType);
+      if (!scene.inventory[this.plantType]) {
+        scene.inventory[this.plantType] = 0;
+      }
+      scene.inventory[this.plantType]++;
+
+      changePlantable(
+        (this.plantObject.x - 32) / 64,
+        (this.plantObject.y - 32) / 64,
+        true,
+      );
+
+      scene.updateInventoryUI();
     }
-    scene.inventory[plantType]++;
-
-    changePlantable(
-      (this.plantObject.x - 32) / 64,
-      (this.plantObject.y - 32) / 64,
-      true,
-    );
-
-    scene.updateInventoryUI();
   }
 
   deletePlant(plants) {
@@ -136,22 +139,25 @@ export class PlantBuilder {
 }
 
 export class redShroom extends Plant {
-  constructor(imageNum) {
+  constructor(imageNum, plantType) {
     super();
     this.fullGrownImage = imageNum;
+    this.plantType = plantType;
   }
 }
 
 export class cactus extends Plant {
-  constructor(imageNum) {
+  constructor(imageNum, plantType) {
     super();
     this.fullGrownImage = imageNum;
+    this.plantType = plantType;
   }
 }
 
 export class snowTree extends Plant {
-  constructor(imageNum) {
+  constructor(imageNum, plantType) {
     super();
     this.fullGrownImage = imageNum;
+    this.plantType = plantType;
   }
 }
