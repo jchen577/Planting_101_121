@@ -25,7 +25,10 @@ export async function loadGameState(scene) {
     scene.inventory = state.inventory;
 
     // Reset and restore plants
-    scene.plants.forEach((plant) => plant.deletePlant(scene.plants));
+    const totalNumPlants = scene.plants.length;
+    for (let i = 0; i < totalNumPlants; i++) {
+      scene.plants[0].deletePlant(scene.plants);
+    }
     state.plants.forEach((plantData) => {
       const { plantType, tileX, tileY, growthLevel } = plantData;
 
